@@ -55,16 +55,23 @@ export function Sidebar({ activeItem, onItemClick, collapsed = false, onToggleCo
     )}>
       {/* Logo Header */}
       <div className="flex items-center gap-2 px-4 py-4 border-b border-gray-100">
-        <div className="w-8 h-8 bg-sapling rounded-lg flex items-center justify-center flex-shrink-0">
-          <Sparkles className="w-5 h-5 text-white" />
-        </div>
-        {!collapsed && <span className="font-semibold text-gray-900">Sapling CRM</span>}
-        <button 
+        <button
           onClick={onToggleCollapse}
-          className={cn("p-1 hover:bg-gray-100 rounded", collapsed ? "ml-0" : "ml-auto")}
+          className={cn(
+            "w-8 h-8 bg-sapling rounded-lg flex items-center justify-center flex-shrink-0 cursor-pointer hover:bg-sapling-dark"
+          )}
         >
-          <Menu className="w-5 h-5 text-gray-500" />
+          <Sparkles className="w-5 h-5 text-white" />
         </button>
+        {!collapsed && <span className="font-semibold text-gray-900">Sapling CRM</span>}
+        {!collapsed && (
+          <button
+            onClick={onToggleCollapse}
+            className="p-1 hover:bg-gray-100 rounded ml-auto"
+          >
+            <Menu className="w-5 h-5 text-gray-500" />
+          </button>
+        )}
       </div>
 
       {/* Primary Navigation */}
@@ -72,17 +79,22 @@ export function Sidebar({ activeItem, onItemClick, collapsed = false, onToggleCo
         {navItems.map((item) => (
           <button
             key={item.id}
-            onClick={() => onItemClick(item.id)}
+            onClick={() => {
+              if (collapsed) {
+                onToggleCollapse?.()
+              }
+              onItemClick(item.id)
+            }}
             className={cn(
               "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
               activeItem === item.id
-                ? "bg-[#8bad71]/10 text-sapling"
+                ? "bg-sapling text-white"
                 : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
             )}
           >
             <item.icon className={cn(
               "w-5 h-5 flex-shrink-0",
-              activeItem === item.id ? "text-sapling" : "text-gray-400"
+              activeItem === item.id ? "text-white" : "text-gray-400"
             )} />
             {!collapsed && <span>{item.label}</span>}
           </button>
@@ -94,17 +106,22 @@ export function Sidebar({ activeItem, onItemClick, collapsed = false, onToggleCo
         {secondaryNavItems.map((item) => (
           <button
             key={item.id}
-            onClick={() => onItemClick(item.id)}
+            onClick={() => {
+              if (collapsed) {
+                onToggleCollapse?.()
+              }
+              onItemClick(item.id)
+            }}
             className={cn(
               "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
               activeItem === item.id
-                ? "bg-[#8bad71]/10 text-sapling"
+                ? "bg-sapling text-white"
                 : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
             )}
           >
             <item.icon className={cn(
               "w-5 h-5 flex-shrink-0",
-              activeItem === item.id ? "text-sapling" : "text-gray-400"
+              activeItem === item.id ? "text-white" : "text-gray-400"
             )} />
             {!collapsed && <span>{item.label}</span>}
           </button>
@@ -115,39 +132,52 @@ export function Sidebar({ activeItem, onItemClick, collapsed = false, onToggleCo
 
         {/* Import */}
         <button
-          onClick={() => onItemClick("import")}
+          onClick={() => {
+            if (collapsed) {
+              onToggleCollapse?.()
+            }
+            onItemClick("import")
+          }}
           className={cn(
             "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
             activeItem === "import"
-              ? "bg-[#8bad71]/10 text-sapling"
+              ? "bg-sapling text-white"
               : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
           )}
         >
           <Download className={cn(
             "w-5 h-5 flex-shrink-0",
-            activeItem === "import" ? "text-sapling" : "text-gray-400"
+            activeItem === "import" ? "text-white" : "text-gray-400"
           )} />
           {!collapsed && <span>Import</span>}
         </button>
 
         {/* Orchid AI */}
         <button
-          onClick={() => onItemClick("orchid-ai")}
+          onClick={() => {
+            if (collapsed) {
+              onToggleCollapse?.()
+            }
+            onItemClick("orchid-ai")
+          }}
           className={cn(
             "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
             activeItem === "orchid-ai"
-              ? "bg-[#8bad71]/10 text-sapling"
+              ? "bg-sapling text-white"
               : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
           )}
         >
           <Sparkles className={cn(
             "w-5 h-5 flex-shrink-0",
-            activeItem === "orchid-ai" ? "text-sapling" : "text-gray-400"
+            activeItem === "orchid-ai" ? "text-white" : "text-gray-400"
           )} />
           {!collapsed && (
             <div className="flex flex-col items-start">
               <span>Orchid AI</span>
-              <span className="text-xs text-gray-400">AI-powered insights</span>
+              <span className={cn(
+                "text-xs",
+                activeItem === "orchid-ai" ? "text-white/70" : "text-gray-400"
+              )}>AI-powered insights</span>
             </div>
           )}
         </button>
@@ -157,34 +187,44 @@ export function Sidebar({ activeItem, onItemClick, collapsed = false, onToggleCo
 
         {/* Operations */}
         <button
-          onClick={() => onItemClick("operations")}
+          onClick={() => {
+            if (collapsed) {
+              onToggleCollapse?.()
+            }
+            onItemClick("operations")
+          }}
           className={cn(
             "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
             activeItem === "operations"
-              ? "bg-[#8bad71]/10 text-sapling"
+              ? "bg-sapling text-white"
               : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
           )}
         >
           <Cog className={cn(
             "w-5 h-5 flex-shrink-0",
-            activeItem === "operations" ? "text-sapling" : "text-gray-400"
+            activeItem === "operations" ? "text-white" : "text-gray-400"
           )} />
           {!collapsed && <span>Operations</span>}
         </button>
 
         {/* Custom */}
         <button
-          onClick={() => onItemClick("custom")}
+          onClick={() => {
+            if (collapsed) {
+              onToggleCollapse?.()
+            }
+            onItemClick("custom")
+          }}
           className={cn(
             "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
             activeItem === "custom"
-              ? "bg-[#8bad71]/10 text-sapling"
+              ? "bg-sapling text-white"
               : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
           )}
         >
           <PlusCircle className={cn(
             "w-5 h-5 flex-shrink-0",
-            activeItem === "custom" ? "text-sapling" : "text-gray-400"
+            activeItem === "custom" ? "text-white" : "text-gray-400"
           )} />
           {!collapsed && <span>Custom</span>}
         </button>
@@ -193,17 +233,22 @@ export function Sidebar({ activeItem, onItemClick, collapsed = false, onToggleCo
       {/* Bottom Section */}
       <div className="border-t border-gray-100 p-2">
         <button
-          onClick={() => onItemClick("settings")}
+          onClick={() => {
+            if (collapsed) {
+              onToggleCollapse?.()
+            }
+            onItemClick("settings")
+          }}
           className={cn(
             "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
             activeItem === "settings"
-              ? "bg-[#8bad71]/10 text-sapling"
+              ? "bg-sapling text-white"
               : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
           )}
         >
           <Settings className={cn(
             "w-5 h-5 flex-shrink-0",
-            activeItem === "settings" ? "text-sapling" : "text-gray-400"
+            activeItem === "settings" ? "text-white" : "text-gray-400"
           )} />
           {!collapsed && <span>Settings</span>}
         </button>

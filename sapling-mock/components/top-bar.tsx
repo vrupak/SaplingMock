@@ -36,12 +36,12 @@ export function TopBar({ onAddContact, onProfileClick }: TopBarProps) {
         </button>
 
         {/* Add Contact Button */}
-        <Button 
+        <Button
           onClick={onAddContact}
-          className="bg-sapling hover:bg-[#7a9d62] text-white gap-2"
+          className="bg-sapling hover:bg-[#7a9d62] text-white w-9 h-9 p-0"
+          size="icon"
         >
-          <Plus className="w-4 h-4" />
-          Add Contact
+          <Plus className="w-5 h-5" />
         </Button>
 
         {/* Profile */}

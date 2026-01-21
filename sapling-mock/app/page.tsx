@@ -104,7 +104,7 @@ export default function SaplingCRM() {
         {/* Content Area */}
         <main className="flex-1 overflow-y-auto">
           {currentView === "contacts" ? (
-            <div className="p-6">
+            <div className="py-6 px-24">
               {/* Page Header */}
               <div className="flex items-center justify-between mb-6">
                 <div>

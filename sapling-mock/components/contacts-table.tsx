@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { Search, Filter, Sparkles, Map, Mail, Phone, DollarSign } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -46,6 +47,29 @@ const typeColors = {
 }
 
 export function ContactsTable({ contacts, onContactClick }: ContactsTableProps) {
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+
+  const allSelected = contacts.length > 0 && selectedIds.size === contacts.length
+  const someSelected = selectedIds.size > 0 && selectedIds.size < contacts.length
+
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedIds(new Set(contacts.map(c => c.id)))
+    } else {
+      setSelectedIds(new Set())
+    }
+  }
+
+  const handleSelectOne = (id: string, checked: boolean) => {
+    const newSet = new Set(selectedIds)
+    if (checked) {
+      newSet.add(id)
+    } else {
+      newSet.delete(id)
+    }
+    setSelectedIds(newSet)
+  }
+
   return (
     <div className="bg-white rounded-lg border border-gray-200">
       {/* Search and Filter Bar */}
@@ -98,7 +122,11 @@ export function ContactsTable({ contacts, onContactClick }: ContactsTableProps) 
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
               <th className="w-12 px-4 py-3 text-left">
-                <Checkbox />
+                <Checkbox
+                  checked={allSelected}
+                  onCheckedChange={(checked) => handleSelectAll(checked === true)}
+                  className={someSelected ? "data-[state=unchecked]:bg-gray-300" : ""}
+                />
               </th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Name
@@ -131,7 +159,10 @@ export function ContactsTable({ contacts, onContactClick }: ContactsTableProps) 
                 onClick={() => onContactClick(contact)}
               >
                 <td className="px-4 py-4" onClick={(e) => e.stopPropagation()}>
-                  <Checkbox />
+                  <Checkbox
+                    checked={selectedIds.has(contact.id)}
+                    onCheckedChange={(checked) => handleSelectOne(contact.id, checked === true)}
+                  />
                 </td>
                 <td className="px-4 py-4">
                   <div className="flex items-center gap-3">

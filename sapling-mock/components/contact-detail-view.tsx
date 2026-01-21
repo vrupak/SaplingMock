@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { ArrowLeft, Mail, Phone, MapPin, Calendar, Pencil, Sparkles, Plus, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -11,6 +12,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { ActivityTimeline } from "./activity-timeline"
+import { EditContactOverlay } from "./edit-contact-overlay"
 import type { Contact } from "./contacts-table"
 
 interface ContactDetailViewProps {
@@ -19,10 +21,12 @@ interface ContactDetailViewProps {
 }
 
 export function ContactDetailView({ contact, onBack }: ContactDetailViewProps) {
+  const [editOverlayOpen, setEditOverlayOpen] = useState(false)
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Back Button */}
-      <div className="px-6 py-4">
+      <div className="px-24 py-4">
         <button
           onClick={onBack}
           className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
@@ -33,10 +37,10 @@ export function ContactDetailView({ contact, onBack }: ContactDetailViewProps) {
       </div>
 
       {/* Profile Header Card */}
-      <div className="mx-6 mb-6 bg-white rounded-lg border border-gray-200 p-6">
-        <div className="flex items-start gap-8">
+      <div className="mx-24 mb-6 bg-white rounded-lg border border-gray-200 p-6">
+        <div className="flex flex-col xl:flex-row items-start gap-8">
           {/* Left: Avatar and Info */}
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 min-w-[200px]">
             <div className="text-xs text-sapling mb-1">Sample Charity</div>
             <div className="text-xs text-gray-400 mb-4">Contact ID: {contact.contactId}</div>
             
@@ -73,7 +77,7 @@ export function ContactDetailView({ contact, onBack }: ContactDetailViewProps) {
           </div>
 
           {/* Middle: Giving Stats */}
-          <div className="flex-1 grid grid-cols-2 gap-8">
+          <div className="flex-1 min-w-0 grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Current Year Giving */}
             <div>
               <h3 className="font-semibold text-gray-900 mb-4">Current Year Giving</h3>
@@ -130,10 +134,21 @@ export function ContactDetailView({ contact, onBack }: ContactDetailViewProps) {
           </div>
 
           {/* Right: AI Insights */}
-          <div className="w-72 border-l border-gray-200 pl-6">
-            <div className="flex items-center gap-2 mb-4">
-              <Sparkles className="w-4 h-4 text-sapling" />
-              <h3 className="font-semibold text-sapling">Orchid AI Insight</h3>
+          <div className="w-72 flex-shrink-0 border-l border-gray-200 pl-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-sapling" />
+                <h3 className="font-semibold text-sapling">Orchid AI Insight</h3>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-2 bg-transparent"
+                onClick={() => setEditOverlayOpen(true)}
+              >
+                <Pencil className="w-3.5 h-3.5" />
+                Edit
+              </Button>
             </div>
             <ul className="space-y-2 text-sm">
               <li className="flex items-start gap-2">
@@ -177,15 +192,12 @@ export function ContactDetailView({ contact, onBack }: ContactDetailViewProps) {
               </div>
             </div>
 
-            <Button variant="ghost" size="sm" className="mt-4 w-full justify-start text-gray-400 hover:text-gray-600">
-              <Pencil className="w-3.5 h-3.5 mr-2" />
-            </Button>
           </div>
         </div>
       </div>
 
       {/* Tabs Section */}
-      <div className="mx-6">
+      <div className="mx-24 pb-6">
         <Tabs defaultValue="at-a-glance" className="w-full">
           <TabsList className="w-full justify-start bg-white border border-gray-200 rounded-lg p-1 h-auto">
             <TabsTrigger value="at-a-glance" className="gap-2 data-[state=active]:bg-gray-100">
@@ -213,7 +225,7 @@ export function ContactDetailView({ contact, onBack }: ContactDetailViewProps) {
           </TabsList>
 
           <TabsContent value="at-a-glance" className="mt-6">
-            <div className="grid grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Left Column: Individuals */}
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <div className="flex items-center justify-between mb-4">
@@ -323,7 +335,7 @@ export function ContactDetailView({ contact, onBack }: ContactDetailViewProps) {
               </div>
 
               {/* Right Column: Activity Timeline */}
-              <div className="col-span-2">
+              <div className="lg:col-span-2">
                 <ActivityTimeline />
               </div>
             </div>
@@ -372,6 +384,16 @@ export function ContactDetailView({ contact, onBack }: ContactDetailViewProps) {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Edit Contact Overlay */}
+      <EditContactOverlay
+        open={editOverlayOpen}
+        onClose={() => setEditOverlayOpen(false)}
+        contact={contact}
+        onSave={(data) => {
+          console.log("Updated contact:", data)
+        }}
+      />
     </div>
   )
 }

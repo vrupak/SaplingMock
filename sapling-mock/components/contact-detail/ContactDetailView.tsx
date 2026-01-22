@@ -8,7 +8,7 @@ import { ContactProfileHeader } from "./ContactProfileHeader"
 import { GivingStatisticsPanel } from "./GivingStatisticsPanel"
 import { OrchidAIInsightsCard } from "./OrchidAIInsightsCard"
 import { ContactSidebar } from "./ContactSidebar"
-import { AtAGlanceTab, GiftsTab } from "./tabs"
+import { AtAGlanceTab, GiftsTab, JourneyAskTab, EventsTab } from "./tabs"
 import { useContactGivingStats } from "./hooks"
 import type { Contact } from "./types"
 
@@ -125,14 +125,15 @@ export function ContactDetailView({ contact, onBack }: ContactDetailViewProps) {
               />
             </TabsContent>
 
-            {/* Other tabs - standard flex-row layout with optional sidebar */}
+            {/* Journey Tab - flex-row layout with optional sidebar */}
             <TabsContent value="journey" className="mt-0 p-0">
-              <div className={`flex ${showSidebar ? 'items-stretch' : ''}`}>
+              <div className="flex items-start">
                 {showSidebar && <ContactSidebar contact={contact} />}
-                <div className="flex-1 min-w-0 p-6">
-                  <h3 className="font-semibold text-gray-900 mb-4">Journey + Gift Asks</h3>
-                  <p className="text-gray-500">Donor journey and gift ask tracking will appear here.</p>
-                </div>
+                <JourneyAskTab
+                  showSidebar={showSidebar}
+                  onToggleSidebar={() => setShowSidebar(!showSidebar)}
+                  contact={contact}
+                />
               </div>
             </TabsContent>
 
@@ -147,13 +148,11 @@ export function ContactDetailView({ contact, onBack }: ContactDetailViewProps) {
             </TabsContent>
 
             <TabsContent value="events" className="mt-0 p-0">
-              <div className={`flex ${showSidebar ? 'items-stretch' : ''}`}>
-                {showSidebar && <ContactSidebar contact={contact} />}
-                <div className="flex-1 min-w-0 p-6">
-                  <h3 className="font-semibold text-gray-900 mb-4">Events</h3>
-                  <p className="text-gray-500">Event attendance and registrations will appear here.</p>
-                </div>
-              </div>
+              <EventsTab
+                showSidebar={showSidebar}
+                onToggleSidebar={() => setShowSidebar(!showSidebar)}
+                contact={contact}
+              />
             </TabsContent>
 
             <TabsContent value="orchid" className="mt-0 p-0">

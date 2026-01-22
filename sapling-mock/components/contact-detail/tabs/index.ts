@@ -1,4 +1,6 @@
 export { AtAGlanceTab } from "./AtAGlanceTab"
 export { GiftsTab } from "./GiftsTab"
+export { JourneyAskTab } from "./JourneyAskTab"
+export { EventsTab } from "./EventsTab"
 export { GiftCard } from "./GiftCard"
 export type { GiftData } from "./GiftCard"

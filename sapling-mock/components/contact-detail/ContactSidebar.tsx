@@ -18,13 +18,13 @@ interface ContactSidebarProps {
 
 export function ContactSidebar({ contact }: ContactSidebarProps) {
   return (
-    <div className="w-[380px] flex-shrink-0 p-6 border-r border-gray-200">
+    <div className="w-[380px] flex-shrink-0 p-6 border-r border-sapling-light/20">
       <IndividualsSection contact={contact} />
 
-      {/* Accordion Sections */}
+      {/* Accordion Sections - All Collapsed by Default */}
       <Accordion
         type="multiple"
-        defaultValue={["wealth", "communication", "workflows", "biography", "relationships", "email-lists"]}
+        defaultValue={[]}
         className="mt-6"
       >
         <WealthAccordion />

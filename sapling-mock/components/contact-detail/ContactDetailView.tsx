@@ -27,7 +27,7 @@ export function ContactDetailView({ contact, onBack }: ContactDetailViewProps) {
   const isSidebarVisible = activeTab === "at-a-glance" || showSidebar
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 overflow-hidden">
       {/* Back Button */}
       <div className="px-24 py-4">
         <button
@@ -105,12 +105,12 @@ export function ContactDetailView({ contact, onBack }: ContactDetailViewProps) {
           </TabsList>
 
           {/* Unified Container: White card wrapping sidebar + content - docked to tabs above */}
-          <div className="bg-white rounded-b-lg rounded-t-none border border-gray-200 border-t-0">
+          <div className="bg-white rounded-b-lg rounded-t-none border border-gray-200 border-t-0 overflow-hidden" style={{ maxHeight: 'none' }}>
             {/* At a Glance Tab - standard flex-row layout with sidebar on left */}
             <TabsContent value="at-a-glance" className="mt-0 p-0">
               <div className="flex items-stretch">
                 <ContactSidebar contact={contact} />
-                <div className="flex-1 min-w-0 p-6">
+                <div className="flex-1 min-w-0 p-6 h-auto">
                   <AtAGlanceTab />
                 </div>
               </div>

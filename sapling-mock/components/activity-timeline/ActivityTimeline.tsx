@@ -68,7 +68,7 @@ export function ActivityTimeline({ items = mockTimelineItems }: ActivityTimeline
   const [noteText, setNoteText] = useState("")
 
   return (
-    <div className="h-full">
+    <div className="h-auto">
       <h3 className="font-semibold text-gray-900 text-lg italic mb-4">Activity Timeline</h3>
 
       {/* Add Note Input */}
@@ -92,8 +92,8 @@ export function ActivityTimeline({ items = mockTimelineItems }: ActivityTimeline
         </Button>
       </div>
 
-      {/* Timeline Items */}
-      <div className="space-y-4 max-h-[800px] overflow-y-auto">
+      {/* Timeline Items - No overflow, natural expansion */}
+      <div className="space-y-4">
         {items.map(renderTimelineItem)}
       </div>
     </div>

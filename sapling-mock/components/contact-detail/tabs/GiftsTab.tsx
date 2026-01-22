@@ -147,7 +147,7 @@ function YearSummaryCard({ year, amount, variant }: YearSummary) {
   }
 
   return (
-    <div className={`border rounded-lg px-5 py-3 min-w-[120px] ${variantClasses[variant]}`}>
+    <div className={`border rounded-lg px-5 py-3 min-w-[120px] flex-1 ${variantClasses[variant]}`}>
       <p className="text-xs text-gray-500 mb-1">{year}</p>
       <p className="text-xl font-bold">{amount}</p>
     </div>
@@ -156,42 +156,40 @@ function YearSummaryCard({ year, amount, variant }: YearSummary) {
 
 export function GiftsTab({ showSidebar, onToggleSidebar, contact }: GiftsTabProps) {
   return (
-    <div className="p-6">
-      {/* Year Summary Cards */}
-      <div className="flex items-center gap-4 mb-6">
-        <button
-          onClick={onToggleSidebar}
-          className={`p-2 hover:bg-gray-100 rounded transition-colors ${showSidebar ? 'bg-gray-100' : ''}`}
-          title={showSidebar ? 'Hide sidebar' : 'Show sidebar'}
-        >
-          <Menu className="w-5 h-5 text-gray-500" />
-        </button>
-        <div className="flex gap-3 flex-1 overflow-x-auto">
-          {yearSummaries.map((summary, idx) => (
-            <YearSummaryCard key={idx} {...summary} />
-          ))}
-          <div className="bg-sapling-light/10 border border-sapling-light/30 rounded-lg px-5 py-3 min-w-[100px]">
-            <p className="text-xs text-gray-500 mb-1">Total Gifts</p>
-            <p className="text-xl font-bold text-sapling">29</p>
+    <div className="p-6 h-auto">
+      {/* Full-Width Header: Toggle Button + Gift Summary Cards */}
+      <div className="w-full mb-6">
+        <div className="flex items-center justify-between gap-4">
+          <button
+            onClick={onToggleSidebar}
+            className={`p-2 hover:bg-gray-100 rounded transition-colors flex-shrink-0 ${showSidebar ? 'bg-gray-100' : ''}`}
+            title={showSidebar ? 'Hide sidebar' : 'Show sidebar'}
+          >
+            <Menu className="w-5 h-5 text-gray-500" />
+          </button>
+          <div className="flex gap-3 flex-1">
+            {yearSummaries.map((summary, idx) => (
+              <YearSummaryCard key={idx} {...summary} />
+            ))}
+            <div className="bg-sapling-light/10 border border-sapling-light/30 rounded-lg px-5 py-3 min-w-[100px] flex-1">
+              <p className="text-xs text-gray-500 mb-1">Total Gifts</p>
+              <p className="text-xl font-bold text-sapling">29</p>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Inline Sidebar - renders full-width below summary cards when toggled */}
-      {showSidebar && (
-        <div className="mb-6 border border-gray-200 rounded-lg p-6 bg-gray-50">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Individuals Section */}
-            <div>
+      {/* Two-Column Layout: Sidebar + Activity Feed */}
+      <div className="flex flex-row w-full items-start gap-0">
+        {/* Left Column: Sidebar (Fixed Width) */}
+        {showSidebar && (
+          <div className="w-80 border-r border-sapling-light/20 pr-6 flex-shrink-0">
+            <div className="space-y-6">
+              {/* Individuals Section */}
               <IndividualsSection contact={contact} />
-            </div>
 
-            {/* Accordion Sections */}
-            <div>
-              <Accordion
-                type="multiple"
-                defaultValue={["wealth", "communication", "workflows", "biography", "relationships", "email-lists"]}
-              >
+              {/* Accordion Sections - All Collapsed by Default */}
+              <Accordion type="multiple" defaultValue={[]}>
                 <WealthAccordion />
                 <CommunicationPreferencesAccordion />
                 <WorkflowsTagsAccordion />
@@ -201,29 +199,32 @@ export function GiftsTab({ showSidebar, onToggleSidebar, contact }: GiftsTabProp
               </Accordion>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Gift Activity Header */}
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900">Gift Activity</h3>
-        <div className="flex items-center gap-3">
-          <Button variant="outline" className="gap-2 bg-transparent">
-            <Filter className="w-4 h-4" />
-            FILTER
-          </Button>
-          <Button className="gap-2 bg-sapling hover:bg-sapling-dark text-white">
-            <Plus className="w-4 h-4" />
-            ADD GIFT
-          </Button>
-        </div>
-      </div>
+        {/* Right Column: Gift Activity Feed (Flexible Width) */}
+        <div className={`flex-1 min-w-0 ${showSidebar ? 'pl-6' : ''}`}>
+          {/* Gift Activity Header */}
+          <div className="flex items-center justify-between mb-4 w-full">
+            <h3 className="text-lg font-semibold text-gray-900">Gift Activity</h3>
+            <div className="flex items-center gap-3 flex-shrink-0">
+              <Button variant="outline" className="gap-2 bg-transparent">
+                <Filter className="w-4 h-4" />
+                FILTER
+              </Button>
+              <Button className="gap-2 bg-sapling hover:bg-sapling-dark text-white">
+                <Plus className="w-4 h-4" />
+                ADD GIFT
+              </Button>
+            </div>
+          </div>
 
-      {/* Gift Cards - full width */}
-      <div className="space-y-4">
-        {sampleGifts.map((gift) => (
-          <GiftCard key={gift.id} gift={gift} />
-        ))}
+          {/* Gift Cards */}
+          <div className="space-y-4 w-full">
+            {sampleGifts.map((gift) => (
+              <GiftCard key={gift.id} gift={gift} />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   )

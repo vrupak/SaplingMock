@@ -258,7 +258,7 @@ export function Sidebar({ activeItem, onItemClick, collapsed = false, onToggleCo
           "flex items-center gap-3 px-3 py-3 mt-2",
           collapsed ? "justify-center" : ""
         )}>
-          <div className="w-8 h-8 bg-[#8bad71]/20 rounded-full flex items-center justify-center flex-shrink-0">
+          <div className="w-8 h-8 bg-sapling-light/20 rounded-full flex items-center justify-center flex-shrink-0">
             <Sparkles className="w-4 h-4 text-sapling" />
           </div>
           {!collapsed && (

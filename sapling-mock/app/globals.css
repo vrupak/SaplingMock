@@ -5,9 +5,9 @@
 
 :root {
   /* Sapling CRM Brand Colors */
-  --sapling-green: #8bad71;
-  --sapling-green-dark: #7a9d62;
-  --sapling-green-light: rgba(139, 173, 113, 0.1);
+  --sapling-light: #8bad71;
+  --sapling-dark: #5a7a42;
+  --sapling-accent: #7a9d62;
   
   /* Status Colors */
   --status-active: #8bad71;
@@ -97,9 +97,11 @@
   --font-mono: 'Geist Mono', 'Geist Mono Fallback';
   
   /* Brand Colors */
-  --color-sapling: var(--sapling-green);
-  --color-sapling-dark: var(--sapling-green-dark);
-  --color-sapling-light: var(--sapling-green-light);
+  --color-sapling-light: var(--sapling-light);
+  --color-sapling-dark: var(--sapling-dark);
+  --color-sapling-accent: var(--sapling-accent);
+  /* Legacy alias for compatibility */
+  --color-sapling: var(--sapling-light);
   
   /* Status Colors */
   --color-status-active: var(--status-active);

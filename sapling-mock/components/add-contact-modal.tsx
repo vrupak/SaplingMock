@@ -233,7 +233,7 @@ export function AddContactModal({ open, onOpenChange, onSave }: AddContactModalP
             Cancel
           </Button>
           <Button 
-            className="bg-sapling hover:bg-[#7a9d62] text-white"
+            className="bg-sapling hover:bg-sapling-accent text-white"
             onClick={handleSubmit}
           >
             Save Contact

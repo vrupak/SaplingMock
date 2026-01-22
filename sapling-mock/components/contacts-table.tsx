@@ -35,13 +35,13 @@ interface ContactsTableProps {
 }
 
 const statusColors = {
-  Active: "bg-[#8bad71]/10 text-sapling border-[#8bad71]/30",
+  Active: "bg-sapling-light/10 text-sapling border-sapling-light/30",
   Recurring: "bg-amber-50 text-amber-700 border-amber-200",
   Prospect: "bg-orange-50 text-orange-700 border-orange-200",
 }
 
 const typeColors = {
-  Household: "bg-[#8bad71]/10 text-sapling border-[#8bad71]/30",
+  Household: "bg-sapling-light/10 text-sapling border-sapling-light/30",
   Foundation: "bg-blue-50 text-blue-700 border-blue-200",
   Business: "bg-purple-50 text-purple-700 border-purple-200",
 }
@@ -99,7 +99,7 @@ export function ContactsTable({ contacts, onContactClick }: ContactsTableProps) 
               <Filter className="w-4 h-4" />
               More Filters
             </Button>
-            <Button variant="outline" className="gap-2 border-[#8bad71]/30 text-sapling hover:bg-[#8bad71]/10 bg-transparent">
+            <Button variant="outline" className="gap-2 border-sapling-light/30 text-sapling hover:bg-sapling-light/10 bg-transparent">
               <Sparkles className="w-4 h-4" />
               Orchid AI Filter
             </Button>
@@ -168,7 +168,7 @@ export function ContactsTable({ contacts, onContactClick }: ContactsTableProps) 
                   <div className="flex items-center gap-3">
                     <div className={cn(
                       "w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium flex-shrink-0",
-                      contact.status === "Active" ? "bg-[#8bad71]/20 text-sapling" :
+                      contact.status === "Active" ? "bg-sapling-light/20 text-sapling" :
                       contact.status === "Recurring" ? "bg-amber-100 text-amber-700" :
                       "bg-orange-100 text-orange-700"
                     )}>

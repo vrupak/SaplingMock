@@ -1,0 +1,6 @@
+export { WealthAccordion } from "./WealthAccordion"
+export { CommunicationPreferencesAccordion } from "./CommunicationPreferencesAccordion"
+export { WorkflowsTagsAccordion } from "./WorkflowsTagsAccordion"
+export { BiographyAccordion } from "./BiographyAccordion"
+export { RelationshipsAccordion } from "./RelationshipsAccordion"
+export { EmailListsAccordion } from "./EmailListsAccordion"

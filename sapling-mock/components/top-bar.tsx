@@ -46,7 +46,7 @@ export function TopBar({ onAddContact, onProfileClick }: TopBarProps) {
         </button>
 
         {/* AI Button */}
-        <button className="p-2 text-sapling hover:text-[#7a9d62] hover:bg-[#8bad71]/10 rounded-full transition-colors">
+        <button className="p-2 text-sapling hover:text-sapling-accent hover:bg-sapling-light/10 rounded-full transition-colors">
           <Sparkles className="w-5 h-5" />
         </button>
 
@@ -54,7 +54,7 @@ export function TopBar({ onAddContact, onProfileClick }: TopBarProps) {
         <div className="relative" ref={menuRef}>
           <Button
             onClick={() => setShowAddMenu(!showAddMenu)}
-            className="bg-sapling hover:bg-[#7a9d62] text-white w-9 h-9 p-0 rounded-full"
+            className="bg-sapling hover:bg-sapling-accent text-white w-9 h-9 p-0 rounded-full"
             size="icon"
           >
             <Plus className="w-5 h-5" />

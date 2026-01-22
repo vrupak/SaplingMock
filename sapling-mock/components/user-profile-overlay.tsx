@@ -123,7 +123,7 @@ export function UserProfileOverlay({ open, onClose }: UserProfileOverlayProps) {
         {/* Access Level Details */}
         <div className="p-6 border-b border-gray-200">
           <h3 className="font-semibold text-gray-900 mb-4">Access Level Details</h3>
-          <div className="bg-[#8bad71]/10 rounded-lg p-4">
+          <div className="bg-sapling-light/10 rounded-lg p-4">
             <p className="text-sm">
               <span className="font-medium text-gray-900">Current Access:</span>{" "}
               <span className="text-sapling">Admin</span>

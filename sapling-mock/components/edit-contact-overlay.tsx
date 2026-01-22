@@ -212,12 +212,12 @@ export function EditContactOverlay({ open, onClose, contact, onSave }: EditConta
             <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-[#8bad71]/20 rounded-full flex items-center justify-center">
+                  <div className="w-10 h-10 bg-sapling-light/20 rounded-full flex items-center justify-center">
                     <span className="text-sm font-medium text-sapling">{contact.initials}</span>
                   </div>
                   <div>
                     <p className="font-medium text-gray-900">{contact.name}</p>
-                    <Badge className="bg-[#8bad71]/10 text-sapling border-[#8bad71]/30 text-xs mt-1">
+                    <Badge className="bg-sapling-light/10 text-sapling border-sapling-light/30 text-xs mt-1">
                       Primary
                     </Badge>
                   </div>

@@ -68,7 +68,7 @@ export function ActivityTimeline({ items = mockTimelineItems }: ActivityTimeline
   const [noteText, setNoteText] = useState("")
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6 h-full">
+    <div className="h-full">
       <h3 className="font-semibold text-gray-900 text-lg italic mb-4">Activity Timeline</h3>
 
       {/* Add Note Input */}

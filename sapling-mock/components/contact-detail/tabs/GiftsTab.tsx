@@ -2,7 +2,24 @@
 
 import { Menu, Filter, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Accordion } from "@/components/ui/accordion"
+import { IndividualsSection } from "../IndividualsSection"
+import {
+  WealthAccordion,
+  CommunicationPreferencesAccordion,
+  WorkflowsTagsAccordion,
+  BiographyAccordion,
+  RelationshipsAccordion,
+  EmailListsAccordion,
+} from "../accordions"
 import { GiftCard, type GiftData } from "./GiftCard"
+import type { Contact } from "../types"
+
+interface GiftsTabProps {
+  showSidebar: boolean
+  onToggleSidebar: () => void
+  contact: Contact
+}
 
 const sampleGifts: GiftData[] = [
   {
@@ -14,6 +31,31 @@ const sampleGifts: GiftData[] = [
     paymentMethod: "Credit Card",
     source: "Organic",
     fund: "General Fund",
+    receiptType: "Tax Deductible",
+    date: "November 10, 2025",
+    time: "14:32:00",
+    lastEditedBy: "Alex Russo",
+    lastEditedDate: "November 10, 2025 at 14:32:00",
+    passthrough: null,
+    campaign: "Direct Mail 2025 - Housefile (Moore Group)",
+    segment: "Direct-Mailer-AB24",
+    tributes: undefined,
+    taxDeductible: "$500.00",
+    nonTaxDeductible: "$0.00",
+    receipted: "November 10, 2025",
+    restrictions: "Unrestricted",
+    notes: "Monthly recurring gift",
+    bgColor: "white",
+  },
+  {
+    id: "g2",
+    amount: "$500.00",
+    donorName: "Jennifer Lee",
+    status: "Received",
+    isRecurring: true,
+    paymentMethod: "Credit Card",
+    source: "Organic",
+    fund: "Scholarship Fund",
     receiptType: "Tax Deductible",
     date: "November 6, 2024",
     time: "14:30:00",
@@ -80,31 +122,6 @@ const sampleGifts: GiftData[] = [
     notes: "DAF grant from The Jennifer Lee Charitable Fund through Fidelity Charitable",
     bgColor: "gray",
   },
-  {
-    id: "g-daf-3",
-    amount: "$7,500.00",
-    donorName: "The Jennifer Lee Charitable Fund",
-    status: "Received",
-    isRecurring: false,
-    paymentMethod: "DAF Check",
-    source: "Foundations",
-    fund: "General Fund",
-    receiptType: "DAF",
-    date: "March 19, 2024",
-    time: "10:15:00",
-    lastEditedBy: "System Admin",
-    lastEditedDate: "March 19, 2024 at 10:15:00",
-    passthrough: { name: "Fidelity Charitable", id: "1041" },
-    campaign: undefined,
-    segment: undefined,
-    tributes: undefined,
-    taxDeductible: "$7,500.00",
-    nonTaxDeductible: "$0.00",
-    receipted: "March 20, 2024",
-    restrictions: "Unrestricted",
-    notes: "Quarterly DAF distribution from The Jennifer Lee Charitable Fund",
-    bgColor: "white",
-  },
 ]
 
 interface YearSummary {
@@ -137,15 +154,19 @@ function YearSummaryCard({ year, amount, variant }: YearSummary) {
   )
 }
 
-export function GiftsTab() {
+export function GiftsTab({ showSidebar, onToggleSidebar, contact }: GiftsTabProps) {
   return (
-    <>
+    <div className="p-6">
       {/* Year Summary Cards */}
       <div className="flex items-center gap-4 mb-6">
-        <button className="p-2 hover:bg-gray-100 rounded transition-colors">
+        <button
+          onClick={onToggleSidebar}
+          className={`p-2 hover:bg-gray-100 rounded transition-colors ${showSidebar ? 'bg-gray-100' : ''}`}
+          title={showSidebar ? 'Hide sidebar' : 'Show sidebar'}
+        >
           <Menu className="w-5 h-5 text-gray-500" />
         </button>
-        <div className="flex gap-3 flex-1">
+        <div className="flex gap-3 flex-1 overflow-x-auto">
           {yearSummaries.map((summary, idx) => (
             <YearSummaryCard key={idx} {...summary} />
           ))}
@@ -155,6 +176,33 @@ export function GiftsTab() {
           </div>
         </div>
       </div>
+
+      {/* Inline Sidebar - renders full-width below summary cards when toggled */}
+      {showSidebar && (
+        <div className="mb-6 border border-gray-200 rounded-lg p-6 bg-gray-50">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Individuals Section */}
+            <div>
+              <IndividualsSection contact={contact} />
+            </div>
+
+            {/* Accordion Sections */}
+            <div>
+              <Accordion
+                type="multiple"
+                defaultValue={["wealth", "communication", "workflows", "biography", "relationships", "email-lists"]}
+              >
+                <WealthAccordion />
+                <CommunicationPreferencesAccordion />
+                <WorkflowsTagsAccordion />
+                <BiographyAccordion />
+                <RelationshipsAccordion />
+                <EmailListsAccordion />
+              </Accordion>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Gift Activity Header */}
       <div className="flex items-center justify-between mb-4">
@@ -171,12 +219,12 @@ export function GiftsTab() {
         </div>
       </div>
 
-      {/* Gift Cards */}
+      {/* Gift Cards - full width */}
       <div className="space-y-4">
         {sampleGifts.map((gift) => (
           <GiftCard key={gift.id} gift={gift} />
         ))}
       </div>
-    </>
+    </div>
   )
 }

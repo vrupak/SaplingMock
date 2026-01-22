@@ -8,6 +8,7 @@ import { ContactsTable, type Contact } from "@/components/contacts-table"
 import { ContactDetailView } from "@/components/contact-detail"
 import { AddContactModal } from "@/components/add-contact-modal"
 import { UserProfileOverlay } from "@/components/user-profile-overlay"
+import { EventsPage } from "@/components/events"
 import { Button } from "@/components/ui/button"
 import { Download, MoreVertical, Plus } from "lucide-react"
 
@@ -63,7 +64,7 @@ const sampleContacts: Contact[] = [
   },
 ]
 
-type View = "contacts" | "contact-detail"
+type View = "contacts" | "contact-detail" | "events"
 
 export default function SaplingCRM() {
   const [activeNav, setActiveNav] = useState("contacts")
@@ -83,12 +84,23 @@ export default function SaplingCRM() {
     setCurrentView("contacts")
   }
 
+  const handleNavClick = (navItem: string) => {
+    setActiveNav(navItem)
+    if (navItem === "events") {
+      setCurrentView("events")
+      setSelectedContact(null)
+    } else if (navItem === "contacts") {
+      setCurrentView("contacts")
+      setSelectedContact(null)
+    }
+  }
+
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
       <Sidebar
         activeItem={activeNav}
-        onItemClick={setActiveNav}
+        onItemClick={handleNavClick}
         collapsed={sidebarCollapsed}
         onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
       />
@@ -120,7 +132,7 @@ export default function SaplingCRM() {
                     <MoreVertical className="w-4 h-4" />
                     Actions
                   </Button>
-                  <Button 
+                  <Button
                     className="bg-sapling hover:bg-sapling-dark text-white gap-2"
                     onClick={() => setAddContactModalOpen(true)}
                   >
@@ -139,6 +151,8 @@ export default function SaplingCRM() {
                 onContactClick={handleContactClick}
               />
             </div>
+          ) : currentView === "events" ? (
+            <EventsPage />
           ) : (
             selectedContact && (
               <ContactDetailView

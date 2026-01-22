@@ -1,14 +1,20 @@
 "use client"
 
 import { useState } from "react"
-import { ArrowLeft, Sparkles, Gift, TrendingUp, FileText, Calendar, Brain, MoreHorizontal } from "lucide-react"
+import { ArrowLeft, Sparkles, Gift, TrendingUp, FileText, Calendar, Brain, MoreHorizontal, CheckSquare, Users, Database } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { EditContactOverlay } from "../edit-contact-overlay"
 import { ContactProfileHeader } from "./ContactProfileHeader"
 import { GivingStatisticsPanel } from "./GivingStatisticsPanel"
 import { OrchidAIInsightsCard } from "./OrchidAIInsightsCard"
 import { ContactSidebar } from "./ContactSidebar"
-import { AtAGlanceTab, GiftsTab, JourneyAskTab, EventsTab } from "./tabs"
+import { AtAGlanceTab, GiftsTab, JourneyAskTab, EventsTab, OrchidInsightsTab } from "./tabs"
 import { useContactGivingStats } from "./hooks"
 import type { Contact } from "./types"
 
@@ -95,13 +101,32 @@ export function ContactDetailView({ contact, onBack }: ContactDetailViewProps) {
               <Brain className="w-4 h-4" />
               Orchid Insights
             </TabsTrigger>
-            <TabsTrigger
-              value="more"
-              className="gap-2 px-6 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-b-sapling-light data-[state=active]:bg-transparent data-[state=active]:text-sapling-dark data-[state=active]:font-semibold text-gray-500 hover:text-gray-700 hover:bg-gray-50 transition-colors"
-            >
-              <MoreHorizontal className="w-4 h-4" />
-              More
-            </TabsTrigger>
+
+            {/* More Dropdown Menu */}
+            <DropdownMenu>
+              <DropdownMenuTrigger className="gap-2 px-6 py-3 rounded-none border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50 transition-colors inline-flex items-center outline-none">
+                <MoreHorizontal className="w-4 h-4" />
+                More
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuItem className="gap-3 py-2.5">
+                  <FileText className="w-4 h-4 text-sapling-light" />
+                  <span className="text-sm text-gray-700">Documents and Legacy Giving</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="gap-3 py-2.5">
+                  <CheckSquare className="w-4 h-4 text-sapling-light" />
+                  <span className="text-sm text-gray-700">Fulfillment</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="gap-3 py-2.5">
+                  <Users className="w-4 h-4 text-sapling-light" />
+                  <span className="text-sm text-gray-700">Memberships</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="gap-3 py-2.5">
+                  <Database className="w-4 h-4 text-sapling-light" />
+                  <span className="text-sm text-gray-700">Data & Enrichment</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </TabsList>
 
           {/* Unified Container: White card wrapping sidebar + content - docked to tabs above */}
@@ -156,23 +181,11 @@ export function ContactDetailView({ contact, onBack }: ContactDetailViewProps) {
             </TabsContent>
 
             <TabsContent value="orchid" className="mt-0 p-0">
-              <div className={`flex ${showSidebar ? 'items-stretch' : ''}`}>
-                {showSidebar && <ContactSidebar contact={contact} />}
-                <div className="flex-1 min-w-0 p-6">
-                  <h3 className="font-semibold text-gray-900 mb-4">Orchid Insights</h3>
-                  <p className="text-gray-500">AI-powered donor insights will appear here.</p>
-                </div>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="more" className="mt-0 p-0">
-              <div className={`flex ${showSidebar ? 'items-stretch' : ''}`}>
-                {showSidebar && <ContactSidebar contact={contact} />}
-                <div className="flex-1 min-w-0 p-6">
-                  <h3 className="font-semibold text-gray-900 mb-4">More Options</h3>
-                  <p className="text-gray-500">Additional contact options will appear here.</p>
-                </div>
-              </div>
+              <OrchidInsightsTab
+                showSidebar={showSidebar}
+                onToggleSidebar={() => setShowSidebar(!showSidebar)}
+                contact={contact}
+              />
             </TabsContent>
           </div>
         </Tabs>

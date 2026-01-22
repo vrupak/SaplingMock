@@ -59,14 +59,17 @@ const sampleEvents: EventData[] = [
   },
 ]
 
-function EventCard({ event }: { event: EventData }) {
+function EventCard({ event, index }: { event: EventData; index: number }) {
   const statusStyles = {
     Attended: "bg-green-100/80 text-green-800 border-green-300",
     Registered: "bg-blue-100/80 text-blue-800 border-blue-300",
   }
 
+  // Alternate row styling: odd rows white, even rows subtle grey
+  const rowBgColor = index % 2 === 0 ? "bg-white" : "bg-slate-50"
+
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-5">
+    <div className={`${rowBgColor} border border-gray-200 rounded-lg p-5`}>
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
           <h4 className="text-base font-bold text-gray-900 mb-2">{event.title}</h4>
@@ -128,7 +131,7 @@ export function EventsTab({ showSidebar, onToggleSidebar, contact }: EventsTabPr
           >
             <Menu className="w-5 h-5 text-gray-500" />
           </button>
-          <h2 className="text-xl font-semibold text-gray-900">Events</h2>
+          <h2 className="text-xl font-semibold text-sapling-dark">Events</h2>
         </div>
 
         {/* Event Participation Section */}
@@ -140,8 +143,8 @@ export function EventsTab({ showSidebar, onToggleSidebar, contact }: EventsTabPr
 
           {/* Event Cards */}
           <div className="space-y-4">
-            {sampleEvents.map((event) => (
-              <EventCard key={event.id} event={event} />
+            {sampleEvents.map((event, index) => (
+              <EventCard key={event.id} event={event} index={index} />
             ))}
           </div>
         </div>

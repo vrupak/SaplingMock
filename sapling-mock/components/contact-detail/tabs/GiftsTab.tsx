@@ -205,7 +205,7 @@ export function GiftsTab({ showSidebar, onToggleSidebar, contact }: GiftsTabProp
         <div className={`flex-1 min-w-0 ${showSidebar ? 'pl-6' : ''}`}>
           {/* Gift Activity Header */}
           <div className="flex items-center justify-between mb-4 w-full">
-            <h3 className="text-lg font-semibold text-gray-900">Gift Activity</h3>
+            <h3 className="text-lg font-semibold text-sapling-dark">Gift Activity</h3>
             <div className="flex items-center gap-3 flex-shrink-0">
               <Button variant="outline" className="gap-2 bg-transparent">
                 <Filter className="w-4 h-4" />

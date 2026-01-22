@@ -69,7 +69,7 @@ export function ActivityTimeline({ items = mockTimelineItems }: ActivityTimeline
 
   return (
     <div className="h-auto">
-      <h3 className="font-semibold text-gray-900 text-lg italic mb-4">Activity Timeline</h3>
+      <h3 className="font-semibold text-sapling-dark text-lg mb-4">Activity Timeline</h3>
 
       {/* Add Note Input */}
       <div className="flex items-center gap-3 mb-6">

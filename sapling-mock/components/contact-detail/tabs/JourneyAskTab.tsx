@@ -246,7 +246,7 @@ export function JourneyAskTab({ showSidebar, onToggleSidebar, contact }: Journey
         >
           <Menu className="w-5 h-5 text-gray-500" />
         </button>
-        <h2 className="text-xl font-semibold text-gray-900">Journey + Asks</h2>
+        <h2 className="text-xl font-semibold text-sapling-dark">Journey + Asks</h2>
       </div>
 
       {/* Donor Journey Section */}

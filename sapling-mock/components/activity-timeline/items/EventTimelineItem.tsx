@@ -9,31 +9,44 @@ import type { TimelineItem, TimelineItemStyles } from "../types"
 interface EventTimelineItemProps {
   item: TimelineItem
   styles: TimelineItemStyles
+  alignment: "left" | "right"
+  isLast?: boolean
+  fullWidth?: boolean
 }
 
-export function EventTimelineItem({ item, styles }: EventTimelineItemProps) {
+export function EventTimelineItem({ item, styles, alignment, fullWidth = false }: EventTimelineItemProps) {
   const { Icon } = styles
 
   return (
-    <div className="flex gap-4">
+    <div className={cn(
+      "flex relative",
+      fullWidth ? "w-full" : "w-[75%]",
+      alignment === "right" ? "self-end" : "self-start"
+    )}>
+      {/* Icon anchored on LEFT side of card at vertical midpoint */}
       <div className={cn(
-        "w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0",
-        styles.iconBg
+        "absolute top-1/2 -translate-y-1/2 flex items-center justify-center",
+        "h-10 w-10 rounded-full border-4 border-white shadow-sm z-20",
+        styles.iconBg,
+        "-left-5 -translate-x-full"
       )}>
         <Icon className={cn("w-5 h-5", styles.iconColor)} />
       </div>
 
+      {/* Card with enhanced borders */}
       <div className={cn(
-        "flex-1 rounded-lg border border-gray-200 p-4",
+        "w-full rounded-lg border-2 p-4 shadow-sm z-10",
         styles.borderColor,
         styles.bgColor
       )}>
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
-              <Badge className="bg-sapling-light/20 text-sapling border-none text-xs font-semibold">EVENT</Badge>
+              <Badge className="bg-sapling-light/20 text-sapling border-none text-[10px] font-bold tracking-wide uppercase">
+                EVENT
+              </Badge>
               <span className="font-medium text-sapling">Gala</span>
-              <Badge className="bg-gray-100 text-gray-700 border-gray-200">{item.status}</Badge>
+              <Badge className="bg-gray-100 text-gray-700 border-gray-200 text-xs">{item.status}</Badge>
             </div>
             <p className="text-sm font-medium text-gray-900 mb-1">{item.eventName}</p>
             <p className="text-sm text-gray-600 mb-1">{item.description}</p>
@@ -48,12 +61,13 @@ export function EventTimelineItem({ item, styles }: EventTimelineItemProps) {
             </p>
           </div>
 
+          {/* Action Icons - top right corner */}
           <div className="flex items-center gap-1 ml-4">
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-              <Pencil className="w-4 h-4 text-gray-400" />
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-gray-100">
+              <Pencil className="w-4 h-4 text-gray-400 hover:text-gray-600" />
             </Button>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-              <Trash2 className="w-4 h-4 text-gray-400" />
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-gray-100">
+              <Trash2 className="w-4 h-4 text-gray-400 hover:text-gray-600" />
             </Button>
           </div>
         </div>

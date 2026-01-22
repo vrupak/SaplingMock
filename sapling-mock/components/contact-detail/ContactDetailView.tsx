@@ -14,7 +14,7 @@ import { ContactProfileHeader } from "./ContactProfileHeader"
 import { GivingStatisticsPanel } from "./GivingStatisticsPanel"
 import { OrchidAIInsightsCard } from "./OrchidAIInsightsCard"
 import { ContactSidebar } from "./ContactSidebar"
-import { AtAGlanceTab, GiftsTab, JourneyAskTab, EventsTab, OrchidInsightsTab } from "./tabs"
+import { AtAGlanceTab, GiftsTab, JourneyAskTab, EventsTab, OrchidInsightsTab, NotesTasksTab } from "./tabs"
 import { useContactGivingStats } from "./hooks"
 import type { Contact } from "./types"
 
@@ -163,13 +163,11 @@ export function ContactDetailView({ contact, onBack }: ContactDetailViewProps) {
             </TabsContent>
 
             <TabsContent value="notes" className="mt-0 p-0">
-              <div className={`flex ${showSidebar ? 'items-stretch' : ''}`}>
-                {showSidebar && <ContactSidebar contact={contact} />}
-                <div className="flex-1 min-w-0 p-6">
-                  <h3 className="font-semibold text-gray-900 mb-4">Notes & Tasks</h3>
-                  <p className="text-gray-500">Notes and task management will appear here.</p>
-                </div>
-              </div>
+              <NotesTasksTab
+                showSidebar={showSidebar}
+                onToggleSidebar={() => setShowSidebar(!showSidebar)}
+                contact={contact}
+              />
             </TabsContent>
 
             <TabsContent value="events" className="mt-0 p-0">

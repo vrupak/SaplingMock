@@ -8,31 +8,40 @@ import type { TimelineItem, TimelineItemStyles } from "../types"
 interface TaskTimelineItemProps {
   item: TimelineItem
   styles: TimelineItemStyles
+  alignment: "left" | "right"
+  isLast?: boolean
+  fullWidth?: boolean
 }
 
-export function TaskTimelineItem({ item, styles }: TaskTimelineItemProps) {
+export function TaskTimelineItem({ item, styles, alignment, fullWidth = false }: TaskTimelineItemProps) {
   const { Icon } = styles
 
   return (
-    <div className="flex gap-4">
-      {/* Icon */}
+    <div className={cn(
+      "flex relative",
+      fullWidth ? "w-full" : "w-[75%]",
+      alignment === "right" ? "self-end" : "self-start"
+    )}>
+      {/* Icon anchored on LEFT side of card at vertical midpoint */}
       <div className={cn(
-        "w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0",
-        styles.iconBg
+        "absolute top-1/2 -translate-y-1/2 flex items-center justify-center",
+        "h-10 w-10 rounded-full border-4 border-white shadow-sm z-20",
+        styles.iconBg,
+        "-left-5 -translate-x-full"
       )}>
         <Icon className={cn("w-5 h-5", styles.iconColor)} />
       </div>
 
-      {/* Card */}
+      {/* Card with enhanced borders */}
       <div className={cn(
-        "flex-1 rounded-lg border-l-4 p-4",
+        "w-full rounded-lg border-2 p-4 shadow-sm z-10",
         styles.borderColor,
         styles.bgColor
       )}>
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <span className={cn(
-              "inline-block px-2 py-0.5 rounded text-xs font-semibold mb-2",
+              "inline-block px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase mb-2",
               styles.badgeColor
             )}>
               {item.title}
@@ -43,7 +52,7 @@ export function TaskTimelineItem({ item, styles }: TaskTimelineItemProps) {
             )}
 
             {item.type === "pinned-note" && item.addedBy && (
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-gray-500 mt-2">
                 Added by: <span className="text-gray-700">{item.addedBy}</span>
                 {" "}&bull;{" "}
                 {item.date}
@@ -51,7 +60,7 @@ export function TaskTimelineItem({ item, styles }: TaskTimelineItemProps) {
             )}
 
             {item.type === "overdue-task" && (
-              <p className="text-xs">
+              <p className="text-xs mt-2">
                 <span className="text-red-600">Due: {item.dueDate}</span>
                 {" "}&bull;{" "}
                 <span className="text-gray-500">Owner: {item.owner}</span>
@@ -59,7 +68,7 @@ export function TaskTimelineItem({ item, styles }: TaskTimelineItemProps) {
             )}
 
             {item.type === "open-task" && (
-              <div className="text-xs text-gray-500 space-y-0.5">
+              <div className="text-xs text-gray-500 space-y-0.5 mt-2">
                 <p>Created: {item.createdDate}</p>
                 <p>Due: {item.dueDate}</p>
                 <p>Owner: {item.owner}</p>
@@ -67,18 +76,18 @@ export function TaskTimelineItem({ item, styles }: TaskTimelineItemProps) {
             )}
           </div>
 
-          {/* Actions */}
+          {/* Actions - top right corner */}
           <div className="flex items-center gap-1 ml-4">
             {item.type !== "pinned-note" && (
-              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                <Square className="w-4 h-4 text-gray-400" />
+              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-gray-100">
+                <Square className="w-4 h-4 text-gray-400 hover:text-gray-600" />
               </Button>
             )}
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-              <Pencil className="w-4 h-4 text-gray-400" />
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-gray-100">
+              <Pencil className="w-4 h-4 text-gray-400 hover:text-gray-600" />
             </Button>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-              <Trash2 className="w-4 h-4 text-gray-400" />
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-gray-100">
+              <Trash2 className="w-4 h-4 text-gray-400 hover:text-gray-600" />
             </Button>
           </div>
         </div>

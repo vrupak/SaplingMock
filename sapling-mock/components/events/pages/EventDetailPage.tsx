@@ -25,10 +25,12 @@ import {
   ImportContactsModal,
   EmailAttendeesModal,
 } from "../modals"
+import { TablePlacementPage } from "./TablePlacementPage"
 import type { Event } from "../types"
 
 type ModalType = "inviteLink" | "addContact" | "importContacts" | "emailAttendees" | null
 type TabType = "overview" | "attendees" | "financials"
+type PageView = "detail" | "tablePlacement"
 
 interface EventDetailPageProps {
   event: Event
@@ -98,6 +100,7 @@ export function EventDetailPage({ event, onBack }: EventDetailPageProps) {
   const [activeTab, setActiveTab] = useState<TabType>("overview")
   const [attendees, setAttendees] = useState<Attendee[]>(sampleAttendees)
   const [activeModal, setActiveModal] = useState<ModalType>(null)
+  const [pageView, setPageView] = useState<PageView>("detail")
 
   // Calculate metrics
   const confirmedCount = attendees.filter((a) => a.status === "confirmed").length
@@ -132,6 +135,16 @@ export function EventDetailPage({ event, onBack }: EventDetailPageProps) {
     { id: "attendees" as const, label: `Attendees (${attendees.length})` },
     { id: "financials" as const, label: "Financials" },
   ]
+
+  // If viewing Table Placement page
+  if (pageView === "tablePlacement") {
+    return (
+      <TablePlacementPage
+        event={event}
+        onBack={() => setPageView("detail")}
+      />
+    )
+  }
 
   return (
     <div className="py-6 px-24">
@@ -201,7 +214,10 @@ export function EventDetailPage({ event, onBack }: EventDetailPageProps) {
             </button>
 
             {/* Primary Action Button */}
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white gap-2 ml-2">
+            <Button
+              onClick={() => setPageView("tablePlacement")}
+              className="bg-blue-600 hover:bg-blue-700 text-white gap-2 ml-2"
+            >
               <LayoutGrid className="w-4 h-4" />
               Table Placement/Seating
             </Button>

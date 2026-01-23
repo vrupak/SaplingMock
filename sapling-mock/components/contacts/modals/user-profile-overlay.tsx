@@ -16,11 +16,11 @@ export function UserProfileOverlay({ open, onClose }: UserProfileOverlayProps) {
   return (
     <>
       {/* Backdrop */}
-      <div 
+      <div
         className="fixed inset-0 z-40"
         onClick={onClose}
       />
-      
+
       {/* Overlay Panel */}
       <div className={cn(
         "fixed top-0 right-0 z-50 w-96 h-full bg-white shadow-xl transform transition-transform duration-300",
@@ -140,8 +140,8 @@ export function UserProfileOverlay({ open, onClose }: UserProfileOverlayProps) {
             <Users className="w-4 h-4" />
             Manage System Users
           </Button>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className="w-full gap-2 justify-center text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700 bg-transparent"
           >
             <LogOut className="w-4 h-4" />

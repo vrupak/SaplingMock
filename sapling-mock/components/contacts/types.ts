@@ -1,6 +1,32 @@
-import type { Contact } from "../contacts-table"
+// Shared Contact types for the contacts module
 
-export type { Contact }
+export interface Contact {
+  id: string
+  initials: string
+  name: string
+  subtitle?: string
+  email?: string
+  phone?: string
+  status: "Active" | "Recurring" | "Prospect"
+  type: "Household" | "Foundation" | "Business"
+  lifetimeGiving: number
+  location?: string
+  contactId: string
+}
+
+export interface ContactFormData {
+  firstName: string
+  lastName: string
+  email: string
+  phone: string
+  donorType: string
+  donorClass: string
+  addressLine1: string
+  city: string
+  stateProvince: string
+  postalCode: string
+  country: string
+}
 
 export interface GivingStats {
   currentYear: {

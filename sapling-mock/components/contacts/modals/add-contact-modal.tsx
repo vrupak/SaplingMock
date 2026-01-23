@@ -17,25 +17,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import type { ContactFormData } from "../types"
 
 interface AddContactModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   onSave?: (contact: ContactFormData) => void
-}
-
-interface ContactFormData {
-  firstName: string
-  lastName: string
-  email: string
-  phone: string
-  donorType: string
-  donorClass: string
-  addressLine1: string
-  city: string
-  stateProvince: string
-  postalCode: string
-  country: string
 }
 
 export function AddContactModal({ open, onOpenChange, onSave }: AddContactModalProps) {
@@ -232,7 +219,7 @@ export function AddContactModal({ open, onOpenChange, onSave }: AddContactModalP
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button 
+          <Button
             className="bg-sapling hover:bg-sapling-accent text-white"
             onClick={handleSubmit}
           >

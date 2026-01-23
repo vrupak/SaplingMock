@@ -4,65 +4,17 @@ import { useState } from "react"
 import { Sidebar } from "@/components/sidebar"
 import { TopBar } from "@/components/top-bar"
 import { MetricCards, SecondaryMetricCards } from "@/components/metric-cards"
-import { ContactsTable, type Contact } from "@/components/contacts-table"
-import { ContactDetailView } from "@/components/contact-detail"
-import { AddContactModal } from "@/components/add-contact-modal"
-import { UserProfileOverlay } from "@/components/user-profile-overlay"
+import {
+  ContactsTable,
+  ContactDetailView,
+  AddContactModal,
+  UserProfileOverlay,
+  sampleContacts,
+  type Contact,
+} from "@/components/contacts"
 import { EventsPage } from "@/components/events"
 import { Button } from "@/components/ui/button"
 import { Download, MoreVertical, Plus } from "lucide-react"
-
-// Sample contacts data matching the screenshots
-const sampleContacts: Contact[] = [
-  {
-    id: "1",
-    initials: "MI",
-    name: "Misc/Anonymous",
-    status: "Active",
-    type: "Household",
-    lifetimeGiving: 0,
-    location: "-",
-    contactId: "9999",
-  },
-  {
-    id: "2",
-    initials: "JL",
-    name: "Jennifer Lee",
-    subtitle: "Main Example Contact",
-    email: "jennifer.lee@email.com",
-    phone: "(206) 555-0103",
-    status: "Recurring",
-    type: "Household",
-    lifetimeGiving: 8500,
-    location: "Seattle, WA",
-    contactId: "1001",
-  },
-  {
-    id: "3",
-    initials: "JA",
-    name: "James and Sarah Anderson",
-    email: "james.anderson@email.com",
-    phone: "(503) 555-0101",
-    status: "Active",
-    type: "Household",
-    lifetimeGiving: 45000,
-    location: "Portland, OR",
-    contactId: "1002",
-  },
-  {
-    id: "4",
-    initials: "CR",
-    name: "The Rodriguez Family",
-    subtitle: "Carlos and Maria Rodriguez",
-    email: "carlos.rodriguez@email.com",
-    phone: "(619) 555-0110",
-    status: "Prospect",
-    type: "Household",
-    lifetimeGiving: 0,
-    location: "San Diego, CA",
-    contactId: "1003",
-  },
-]
 
 type View = "contacts" | "contact-detail" | "events"
 

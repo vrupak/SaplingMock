@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { EditContactOverlay } from "../edit-contact-overlay"
+import { EditContactOverlay } from "../modals"
 import { ContactProfileHeader } from "./ContactProfileHeader"
 import { GivingStatisticsPanel } from "./GivingStatisticsPanel"
 import { OrchidAIInsightsCard } from "./OrchidAIInsightsCard"

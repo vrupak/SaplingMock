@@ -14,36 +14,12 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
-
-export interface Contact {
-  id: string
-  initials: string
-  name: string
-  subtitle?: string
-  email?: string
-  phone?: string
-  status: "Active" | "Recurring" | "Prospect"
-  type: "Household" | "Foundation" | "Business"
-  lifetimeGiving: number
-  location?: string
-  contactId: string
-}
+import type { Contact } from "../types"
+import { statusColors, typeColors } from "../mock-data"
 
 interface ContactsTableProps {
   contacts: Contact[]
   onContactClick: (contact: Contact) => void
-}
-
-const statusColors = {
-  Active: "bg-sapling-light/10 text-sapling border-sapling-light/30",
-  Recurring: "bg-amber-50 text-amber-700 border-amber-200",
-  Prospect: "bg-orange-50 text-orange-700 border-orange-200",
-}
-
-const typeColors = {
-  Household: "bg-sapling-light/10 text-sapling border-sapling-light/30",
-  Foundation: "bg-blue-50 text-blue-700 border-blue-200",
-  Business: "bg-purple-50 text-purple-700 border-purple-200",
 }
 
 export function ContactsTable({ contacts, onContactClick }: ContactsTableProps) {

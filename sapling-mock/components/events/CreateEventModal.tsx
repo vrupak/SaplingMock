@@ -1,12 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import { CalendarIcon, Sparkles } from "lucide-react"
+import { CalendarIcon, Sparkles, X } from "lucide-react"
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -82,27 +80,41 @@ export function CreateEventModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="!max-w-3xl sm:!max-w-3xl max-h-[90vh] overflow-y-auto w-full">
-        <DialogHeader>
-          <div className="flex items-start gap-3">
-            <div className="p-2 bg-blue-50 rounded-lg">
-              <CalendarIcon className="w-5 h-5 text-blue-600" />
+      <DialogContent className="w-[95vw] max-w-xl sm:max-w-2xl md:max-w-2xl lg:max-w-3xl max-h-[90vh] overflow-hidden p-0" showCloseButton={false}>
+        {/* Sticky Header */}
+        <div className="sticky top-0 bg-white z-10 border-b border-gray-200 px-6 pt-6 pb-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-blue-50 rounded-lg">
+                <CalendarIcon className="w-5 h-5 text-blue-600" />
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold text-gray-900">Create Event</h2>
+                <p className="text-sm text-gray-500 mt-0.5">
+                  Plan your next fundraiser, gala, or community event
+                </p>
+              </div>
             </div>
-            <div className="flex-1">
-              <DialogTitle className="text-xl font-semibold text-gray-900">
-                Create Event
-              </DialogTitle>
-              <p className="text-sm text-gray-500 mt-1">
-                Plan your next fundraiser, gala, or community event
-              </p>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                className="p-1.5 hover:bg-gray-100 rounded transition-colors"
+              >
+                <Sparkles className="w-5 h-5 text-amber-500" />
+              </button>
+              <button
+                type="button"
+                onClick={() => onOpenChange(false)}
+                className="p-1.5 hover:bg-gray-100 rounded transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
             </div>
-            <button className="p-1.5 hover:bg-gray-100 rounded transition-colors">
-              <Sparkles className="w-5 h-5 text-amber-500" />
-            </button>
           </div>
-        </DialogHeader>
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6 mt-6">
+        {/* Scrollable Form Content */}
+        <form onSubmit={handleSubmit} className="overflow-y-auto max-h-[calc(90vh-164px)] px-6 py-6 space-y-6">
           {/* Event Details Section */}
           <div className="space-y-4">
             <h3 className="text-sm font-semibold text-gray-900">Event Details</h3>
@@ -353,9 +365,11 @@ export function CreateEventModal({
               </div>
             </div>
           </div>
+        </form>
 
-          {/* Footer Buttons */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t">
+        {/* Sticky Footer */}
+        <div className="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 z-10">
+          <div className="flex items-center justify-end gap-3">
             <Button
               type="button"
               variant="outline"
@@ -368,13 +382,14 @@ export function CreateEventModal({
             </Button>
             <Button
               type="submit"
+              onClick={handleSubmit}
               className="bg-sapling-light hover:bg-sapling-dark text-white"
             >
               <CalendarIcon className="w-4 h-4 mr-2" />
               Create Event
             </Button>
           </div>
-        </form>
+        </div>
       </DialogContent>
     </Dialog>
   )

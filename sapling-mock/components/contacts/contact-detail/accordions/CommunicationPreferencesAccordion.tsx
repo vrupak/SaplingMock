@@ -28,7 +28,7 @@ export function CommunicationPreferencesAccordion({
 }: CommunicationPreferencesAccordionProps) {
   return (
     <AccordionItem value="communication">
-      <AccordionTrigger className="hover:no-underline">
+      <AccordionTrigger className="hover:no-underline text-lg text-sapling font-semibold">
         Communication Preferences
       </AccordionTrigger>
       <AccordionContent>

@@ -1,7 +1,6 @@
 "use client"
 
-import { useState } from "react"
-import { Mail, Phone, Calendar, Pencil, Sparkles, Plus, ChevronDown } from "lucide-react"
+import { Mail, Phone, Calendar, Pencil, Trash2, Plus, Wand2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import type { Contact } from "./types"
 
@@ -10,62 +9,66 @@ interface IndividualsSectionProps {
 }
 
 export function IndividualsSection({ contact }: IndividualsSectionProps) {
-  const [isExpanded, setIsExpanded] = useState(false)
-
   return (
     <div>
-      <button
-        onClick={() => setIsExpanded(!isExpanded)}
-        className="flex items-center justify-between w-full mb-4 group"
-      >
-        <h3 className="font-semibold text-gray-900">Individuals</h3>
-        <ChevronDown
-          className={`w-4 h-4 text-gray-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
-        />
-      </button>
+      {/* Header with Add Individual button */}
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="font-semibold text-lg text-sapling">Individuals</h3>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="gap-1.5 text-sapling hover:text-sapling-accent hover:bg-sapling-light/10 h-8 px-3"
+        >
+          <Plus className="w-4 h-4" />
+          Add Individual
+        </Button>
+      </div>
 
-      {isExpanded && (
-        <>
-          <Button variant="ghost" size="sm" className="gap-2 text-sapling hover:text-sapling-accent hover:bg-sapling-light/10 mb-4">
-            <Plus className="w-4 h-4" />
-            Add Individual
-          </Button>
-
-          <div className="border border-gray-200 rounded-lg p-4">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="font-medium text-gray-900">{contact.name}</p>
-                <p className="text-sm text-gray-500">Primary</p>
-              </div>
-              <div className="flex gap-1">
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                  <Pencil className="w-3.5 h-3.5 text-gray-400" />
-                </Button>
-              </div>
+      {/* Individual Card - Always visible */}
+      <div className="border border-gray-200 rounded-lg overflow-hidden">
+        <div className="border-l-4 border-sapling p-4">
+          {/* Name and Actions Row */}
+          <div className="flex items-start justify-between mb-1">
+            <div>
+              <p className="font-semibold text-gray-900">{contact.name || "Jennifer Lee"}</p>
+              <p className="text-sm text-sapling font-medium">Primary</p>
             </div>
-            <div className="mt-3 space-y-1 text-sm text-gray-600">
-              <div className="flex items-center gap-2">
-                <Mail className="w-3.5 h-3.5 text-gray-400" />
-                <span>{contact.email || "jennifer.lee@email.com"}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Phone className="w-3.5 h-3.5 text-gray-400" />
-                <span>{contact.phone || "(206) 555-0103"}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Calendar className="w-3.5 h-3.5 text-gray-400" />
-                <span>June 9, 1985</span>
-              </div>
+            <div className="flex items-center gap-1">
+              <button className="p-1.5 hover:bg-gray-100 rounded transition-colors">
+                <Pencil className="w-4 h-4 text-sapling" />
+              </button>
+              <button className="p-1.5 hover:bg-gray-100 rounded transition-colors">
+                <Trash2 className="w-4 h-4 text-red-400" />
+              </button>
             </div>
-            <p className="text-xs text-gray-400 mt-3">ID: 1a</p>
           </div>
 
-          <Button variant="outline" className="w-full mt-4 gap-2 border-dashed bg-transparent">
-            <Sparkles className="w-4 h-4" />
-            Generate Potential Contact Information
-          </Button>
-        </>
-      )}
+          {/* Contact Details */}
+          <div className="mt-3 space-y-2 text-sm text-gray-600">
+            <div className="flex items-center gap-2">
+              <Mail className="w-4 h-4 text-gray-400" />
+              <span>{contact.email || "jennifer.lee@email.com"}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Phone className="w-4 h-4 text-gray-400" />
+              <span>{contact.phone || "(206) 555-0103"}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-gray-400" />
+              <span>June 9, 1985</span>
+            </div>
+          </div>
+
+          {/* ID */}
+          <p className="text-sm text-gray-400 mt-3">ID: 1a</p>
+        </div>
+      </div>
+
+      {/* Generate Contact Information Button */}
+      <button className="w-full mt-4 py-2.5 px-4 flex items-center justify-center gap-2 text-sm text-sapling font-medium bg-sapling-light/10 hover:bg-sapling-light/20 border border-sapling-light/30 rounded-lg transition-colors">
+        <Wand2 className="w-3.5 h-3.5" />
+        Generate Potential Contact Information
+      </button>
     </div>
   )
 }

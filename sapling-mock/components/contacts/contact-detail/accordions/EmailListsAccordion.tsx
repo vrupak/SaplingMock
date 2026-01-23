@@ -30,7 +30,7 @@ export function EmailListsAccordion({
 }: EmailListsAccordionProps) {
   return (
     <AccordionItem value="email-lists">
-      <AccordionTrigger className="hover:no-underline">
+      <AccordionTrigger className="hover:no-underline text-lg text-sapling font-semibold">
         <div className="flex items-center gap-2">
           Email Lists
           <Badge className="bg-sapling-light/20 text-sapling border-none text-xs">{totalCount}</Badge>

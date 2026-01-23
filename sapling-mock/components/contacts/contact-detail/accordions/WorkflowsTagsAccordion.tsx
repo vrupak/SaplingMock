@@ -33,7 +33,7 @@ export function WorkflowsTagsAccordion({
 }: WorkflowsTagsAccordionProps) {
   return (
     <AccordionItem value="workflows">
-      <AccordionTrigger className="hover:no-underline">
+      <AccordionTrigger className="hover:no-underline text-lg text-sapling font-semibold">
         Workflows and Tags
       </AccordionTrigger>
       <AccordionContent>

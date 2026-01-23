@@ -33,7 +33,7 @@ const defaultData: BiographyData = {
 export function BiographyAccordion({ data = defaultData }: BiographyAccordionProps) {
   return (
     <AccordionItem value="biography">
-      <AccordionTrigger className="hover:no-underline">
+      <AccordionTrigger className="hover:no-underline text-lg text-sapling font-semibold">
         Biography and Research
       </AccordionTrigger>
       <AccordionContent>

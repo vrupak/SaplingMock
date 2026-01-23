@@ -10,6 +10,9 @@ export { sampleContacts, statusColors, typeColors } from "./mock-data"
 // Hooks
 export * from "./hooks"
 
+// UI Components
+export { MetricCards, SecondaryMetricCards } from "./components"
+
 // Table components
 export { ContactsTable } from "./table"
 

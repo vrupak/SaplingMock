@@ -3,12 +3,12 @@
 import { useState } from "react"
 import { Sidebar } from "@/components/sidebar"
 import { TopBar } from "@/components/top-bar"
-import { MetricCards, SecondaryMetricCards } from "@/components/metric-cards"
 import {
   ContactsTable,
   ContactDetailView,
   AddContactModal,
   UserProfileOverlay,
+  MetricCards,
   sampleContacts,
   type Contact,
 } from "@/components/contacts"

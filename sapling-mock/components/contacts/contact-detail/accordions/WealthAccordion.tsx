@@ -37,7 +37,7 @@ const defaultData: WealthData = {
 export function WealthAccordion({ data = defaultData }: WealthAccordionProps) {
   return (
     <AccordionItem value="wealth">
-      <AccordionTrigger className="hover:no-underline">
+      <AccordionTrigger className="hover:no-underline text-lg text-sapling font-semibold">
         Wealth
       </AccordionTrigger>
       <AccordionContent>

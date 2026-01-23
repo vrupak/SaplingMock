@@ -15,7 +15,13 @@ import { Button } from "@/components/ui/button"
 import { SeatingSummary } from "../components/SeatingSummary"
 import { VenueCanvas } from "../components/VenueCanvas"
 import { SeatingGridView } from "../components/SeatingGridView"
+import { VisualSeatingChart } from "../components/VisualSeatingChart"
+import { SeatingMetricCards } from "../components/SeatingMetricCards"
 import { sampleTables, calculateSeatingMetrics } from "../data/table-mock-data"
+import {
+  sampleSeatingRows,
+  calculateVisualSeatingMetrics,
+} from "../data/seating-mock-data"
 import {
   AddTableModal,
   TableLayoutGeneratorModal,
@@ -60,6 +66,7 @@ export function TablePlacementPage({ event, onBack }: TablePlacementPageProps) {
   })
 
   const metrics = calculateSeatingMetrics(tables)
+  const seatingMetrics = calculateVisualSeatingMetrics(sampleSeatingRows)
 
   const handleTableClick = (table: TableData) => {
     console.log("Table clicked:", table)
@@ -195,72 +202,85 @@ export function TablePlacementPage({ event, onBack }: TablePlacementPageProps) {
         </div>
       </div>
 
-      {/* Unified Action Bar - All aligned right */}
-      <div className="flex items-center justify-end gap-3 mb-6">
-        {/* AI Button (Yellow Crown) */}
-        <button
-          onClick={() => setIsAIActive(!isAIActive)}
-          className={`p-2.5 rounded-lg border transition-colors ${
-            isAIActive
-              ? "bg-yellow-50 border-yellow-400 text-yellow-500"
-              : "bg-white border-gray-200 text-yellow-400 hover:border-yellow-300 hover:bg-yellow-50/50"
-          }`}
-          title="Orchid AI"
-        >
-          <Crown className="w-5 h-5" />
-        </button>
-
-        {/* View Selector Group */}
-        <div className="flex items-center border border-gray-200 rounded-lg p-1 bg-white">
-          {/* Venue Layout View (Map Pin) */}
+      {/* Unified Action Bar - Only show for Tables view */}
+      {viewMode === "tables" && (
+        <div className="flex items-center justify-end gap-3 mb-6">
+          {/* AI Button (Yellow Crown) */}
           <button
-            onClick={() => setContentView("layout")}
-            className={`p-2 rounded-md transition-colors ${
-              contentView === "layout"
-                ? "bg-blue-600 text-white"
-                : "text-gray-400 hover:text-blue-500 hover:bg-gray-50"
+            onClick={() => setIsAIActive(!isAIActive)}
+            className={`p-2.5 rounded-lg border transition-colors ${
+              isAIActive
+                ? "bg-yellow-50 border-yellow-400 text-yellow-500"
+                : "bg-white border-gray-200 text-yellow-400 hover:border-yellow-300 hover:bg-yellow-50/50"
             }`}
-            title="Table Layout"
+            title="Orchid AI"
           >
-            <MapPin className="w-5 h-5" />
+            <Crown className="w-5 h-5" />
           </button>
 
-          {/* Grid View (Table Grid) */}
-          <button
-            onClick={() => setContentView("grid")}
-            className={`p-2 rounded-md transition-colors ${
-              contentView === "grid"
-                ? "bg-blue-600 text-white"
-                : "text-gray-400 hover:text-blue-500 hover:bg-gray-50"
-            }`}
-            title="Grid View"
+          {/* View Selector Group */}
+          <div className="flex items-center border border-gray-200 rounded-lg p-1 bg-white">
+            {/* Venue Layout View (Map Pin) */}
+            <button
+              onClick={() => setContentView("layout")}
+              className={`p-2 rounded-md transition-colors ${
+                contentView === "layout"
+                  ? "bg-blue-600 text-white"
+                  : "text-gray-400 hover:text-blue-500 hover:bg-gray-50"
+              }`}
+              title="Table Layout"
+            >
+              <MapPin className="w-5 h-5" />
+            </button>
+
+            {/* Grid View (Table Grid) */}
+            <button
+              onClick={() => setContentView("grid")}
+              className={`p-2 rounded-md transition-colors ${
+                contentView === "grid"
+                  ? "bg-blue-600 text-white"
+                  : "text-gray-400 hover:text-blue-500 hover:bg-gray-50"
+              }`}
+              title="Grid View"
+            >
+              <Grid3x3 className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Primary Action Buttons */}
+          <Button
+            onClick={() => setIsAddTableModalOpen(true)}
+            className="bg-sapling-light hover:bg-sapling-dark text-white gap-2"
           >
-            <Grid3x3 className="w-5 h-5" />
-          </button>
+            <Plus className="w-4 h-4" />
+            Add Table/Seating
+          </Button>
+          <Button
+            onClick={() => setIsLayoutGeneratorModalOpen(true)}
+            className="bg-blue-600 hover:bg-blue-700 text-white gap-2"
+          >
+            <Table className="w-4 h-4" />
+            Create Table Layout
+          </Button>
         </div>
+      )}
 
-        {/* Primary Action Buttons */}
-        <Button
-          onClick={() => setIsAddTableModalOpen(true)}
-          className="bg-sapling-light hover:bg-sapling-dark text-white gap-2"
-        >
-          <Plus className="w-4 h-4" />
-          Add Table/Seating
-        </Button>
-        <Button
-          onClick={() => setIsLayoutGeneratorModalOpen(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white gap-2"
-        >
-          <Table className="w-4 h-4" />
-          Create Table Layout
-        </Button>
-      </div>
+      {/* Summary Cards - Show different cards based on view mode */}
+      {viewMode === "seats" ? (
+        <SeatingMetricCards metrics={seatingMetrics} />
+      ) : (
+        <SeatingSummary metrics={metrics} />
+      )}
 
-      {/* Summary Cards */}
-      <SeatingSummary metrics={metrics} />
-
-      {/* Content Area - Grid View or Venue Canvas */}
-      {contentView === "grid" ? (
+      {/* Content Area - Show Visual Seating Chart for seats view, Grid/Canvas for tables view */}
+      {viewMode === "seats" ? (
+        <VisualSeatingChart
+          rows={sampleSeatingRows}
+          onSeatClick={(seat, row) => {
+            console.log("Seat clicked:", seat, "in row:", row)
+          }}
+        />
+      ) : contentView === "grid" ? (
         <SeatingGridView
           tables={tables}
           onAddGuest={(table) => handleAddGuest(table.id)}

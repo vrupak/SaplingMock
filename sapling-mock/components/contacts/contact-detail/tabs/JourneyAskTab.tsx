@@ -278,7 +278,7 @@ export function JourneyAskTab({ showSidebar, onToggleSidebar, contact }: Journey
         <div className="flex items-center justify-between mb-6 overflow-x-auto pb-4">
           {stages.map((stage, index) => (
             <div key={stage.id} className="flex items-center">
-              <StageStep stage={stage} isActive={stage.active || false} isCompleted={stage.completed} />
+              <StageStep stage={stage} isActive={stage.active || false} isCompleted={stage.completed || false} />
               {index < stages.length - 1 && (
                 <div className={`h-0.5 w-16 mx-2 ${stage.completed ? "bg-gray-400" : "bg-gray-300"}`} />
               )}

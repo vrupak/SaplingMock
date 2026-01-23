@@ -6,9 +6,10 @@ import type { Event } from "./types"
 
 interface EventCardProps {
   event: Event
+  onClick?: (event: Event) => void
 }
 
-export function EventCard({ event }: EventCardProps) {
+export function EventCard({ event, onClick }: EventCardProps) {
   const registrationProgress = (event.registered / event.capacity) * 100
   const revenueProgress = event.fundraisingGoal > 0
     ? (event.revenue / event.fundraisingGoal) * 100
@@ -32,7 +33,10 @@ export function EventCard({ event }: EventCardProps) {
   }
 
   return (
-    <div className="group bg-white border border-gray-200 rounded-lg p-5 transition-all duration-200 hover:border-metric-blue hover:shadow-md">
+    <div
+      className="group bg-white border border-gray-200 rounded-lg p-5 transition-all duration-200 hover:border-metric-blue hover:shadow-md cursor-pointer"
+      onClick={() => onClick?.(event)}
+    >
       {/* Header: Title and Badges */}
       <div className="flex items-start justify-between gap-3 mb-3">
         <h3 className="text-base font-semibold text-gray-900 flex-1 min-w-0 line-clamp-2">

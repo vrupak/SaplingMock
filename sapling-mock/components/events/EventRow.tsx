@@ -5,9 +5,10 @@ import type { Event } from "./types"
 
 interface EventRowProps {
   event: Event
+  onClick?: (event: Event) => void
 }
 
-export function EventRow({ event }: EventRowProps) {
+export function EventRow({ event, onClick }: EventRowProps) {
   const registrationPercentage = Math.round((event.registered / event.capacity) * 100)
 
   // Category badge styles - lowercase display with color coding
@@ -44,7 +45,10 @@ export function EventRow({ event }: EventRowProps) {
   }
 
   return (
-    <tr className="border-b border-slate-200 hover:bg-slate-100 transition-colors">
+    <tr
+      className="border-b border-slate-200 hover:bg-slate-100 transition-colors cursor-pointer"
+      onClick={() => onClick?.(event)}
+    >
       {/* Event Column - Name and Category Badge */}
       <td className="py-4 px-4">
         <div className="flex flex-col gap-1.5">

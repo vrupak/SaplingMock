@@ -14,8 +14,9 @@ import {
 import { EventCard } from "./EventCard"
 import { EventRow } from "./EventRow"
 import { CreateEventModal } from "./CreateEventModal"
+import { EventDetailPage } from "./EventDetailPage"
 import { useEvents } from "./hooks/useEvents"
-import type { EventFormData } from "./types"
+import type { Event, EventFormData } from "./types"
 
 export function EventsPage() {
   const {
@@ -30,6 +31,15 @@ export function EventsPage() {
 
   const [createModalOpen, setCreateModalOpen] = useState(false)
   const [viewMode, setViewMode] = useState<"grid" | "list">("list")
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
+
+  const handleEventClick = (event: Event) => {
+    setSelectedEvent(event)
+  }
+
+  const handleBackToEvents = () => {
+    setSelectedEvent(null)
+  }
 
   const handleCreateEvent = (eventData: EventFormData) => {
     addEvent({
@@ -50,6 +60,11 @@ export function EventsPage() {
       ticketPrice: parseFloat(eventData.ticketPrice) || 0,
       fundraisingGoal: parseFloat(eventData.fundraisingGoal) || 0,
     })
+  }
+
+  // If an event is selected, show the detail page
+  if (selectedEvent) {
+    return <EventDetailPage event={selectedEvent} onBack={handleBackToEvents} />
   }
 
   return (
@@ -212,7 +227,7 @@ export function EventsPage() {
         viewMode === "grid" ? (
           <div className="grid grid-cols-3 gap-6">
             {events.map((event) => (
-              <EventCard key={event.id} event={event} />
+              <EventCard key={event.id} event={event} onClick={handleEventClick} />
             ))}
           </div>
         ) : (
@@ -242,7 +257,7 @@ export function EventsPage() {
               </thead>
               <tbody>
                 {events.map((event) => (
-                  <EventRow key={event.id} event={event} />
+                  <EventRow key={event.id} event={event} onClick={handleEventClick} />
                 ))}
               </tbody>
             </table>

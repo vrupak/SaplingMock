@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Menu, Sparkles, TrendingUp, DollarSign, Activity, Lightbulb, Target, Send } from "lucide-react"
+import { Menu, Sparkles, TrendingUp, DollarSign, Activity, Lightbulb, Target, Send, Workflow } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Accordion } from "@/components/ui/accordion"
 import { IndividualsSection } from "../IndividualsSection"
@@ -24,7 +24,7 @@ interface OrchidInsightsTabProps {
 interface KeyInsight {
   id: string
   text: string
-  color: "green" | "blue" | "purple" | "amber"
+  color: "green" | "blue" | "purple" | "orange"
 }
 
 interface RecommendedAction {
@@ -33,6 +33,7 @@ interface RecommendedAction {
   title: string
   subtitle: string
   priority: "high" | "medium"
+  theme?: "green" | "blue" | "purple"
 }
 
 const keyInsights: KeyInsight[] = [
@@ -54,7 +55,7 @@ const keyInsights: KeyInsight[] = [
   {
     id: "4",
     text: "Prefers digital communication channels over traditional mail",
-    color: "amber",
+    color: "orange",
   },
 ]
 
@@ -65,6 +66,7 @@ const recommendedActions: RecommendedAction[] = [
     title: "Schedule cultivation meeting",
     subtitle: "Within next 2 weeks • High priority",
     priority: "high",
+    theme: "green",
   },
   {
     id: "2",
@@ -72,6 +74,7 @@ const recommendedActions: RecommendedAction[] = [
     title: "Send personalized impact report",
     subtitle: "This week • Medium priority",
     priority: "medium",
+    theme: "blue",
   },
   {
     id: "3",
@@ -79,6 +82,7 @@ const recommendedActions: RecommendedAction[] = [
     title: "Invite to exclusive event",
     subtitle: "Within 30 days • Medium priority",
     priority: "medium",
+    theme: "purple",
   },
 ]
 
@@ -95,7 +99,7 @@ const givingYears = [
 
 function DonorScoreCard() {
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-5 flex flex-col">
+    <div className="bg-white border border-slate-200 rounded-xl p-5 flex flex-col">
       <div className="flex items-center gap-2 mb-3">
         <TrendingUp className="w-4 h-4 text-sapling" />
         <h3 className="text-sm font-semibold text-gray-900">Donor Score</h3>
@@ -113,7 +117,7 @@ function DonorScoreCard() {
 
 function NextGiftPredictionCard() {
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-5 flex flex-col">
+    <div className="bg-white border border-slate-200 rounded-xl p-5 flex flex-col">
       <div className="flex items-center gap-2 mb-3">
         <DollarSign className="w-4 h-4 text-blue-600" />
         <h3 className="text-sm font-semibold text-gray-900">Next Gift Prediction</h3>
@@ -129,7 +133,7 @@ function NextGiftPredictionCard() {
 
 function EngagementLevelCard() {
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-5 flex flex-col">
+    <div className="bg-white border border-slate-200 rounded-xl p-5 flex flex-col">
       <div className="flex items-center gap-2 mb-3">
         <Activity className="w-4 h-4 text-purple-600" />
         <h3 className="text-sm font-semibold text-gray-900">Engagement Level</h3>
@@ -149,45 +153,51 @@ function EngagementLevelCard() {
 }
 
 function KeyInsightItem({ insight }: { insight: KeyInsight }) {
-  const colorStyles = {
-    green: "text-sapling",
-    blue: "text-blue-600",
-    purple: "text-purple-600",
-    amber: "text-amber-600",
+  const bulletColors = {
+    green: "bg-sapling",
+    blue: "bg-blue-600",
+    purple: "bg-purple-600",
+    orange: "bg-orange-600",
   }
 
   return (
     <div className="flex items-start gap-2">
-      <div className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${colorStyles[insight.color].replace("text-", "bg-")}`} />
-      <p className="text-sm text-gray-700">{insight.text}</p>
+      <div className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${bulletColors[insight.color]}`} />
+      <p className="text-sm leading-relaxed text-slate-600">{insight.text}</p>
     </div>
   )
 }
 
 function RecommendedActionCard({ action }: { action: RecommendedAction }) {
-  const priorityStyles = {
-    high: {
-      bg: "bg-green-50",
+  const themeStyles = {
+    green: {
+      bg: "bg-green-50/50",
       border: "border-green-200",
       number: "bg-green-600 text-white",
     },
-    medium: {
-      bg: "bg-blue-50",
+    blue: {
+      bg: "bg-blue-50/50",
       border: "border-blue-200",
       number: "bg-blue-600 text-white",
     },
+    purple: {
+      bg: "bg-purple-50/50",
+      border: "border-purple-200",
+      number: "bg-purple-600 text-white",
+    },
   }
 
-  const style = priorityStyles[action.priority]
+  const theme = action.theme || (action.priority === "high" ? "green" : "blue")
+  const style = themeStyles[theme]
 
   return (
-    <div className={`flex items-start gap-3 p-3 rounded-lg border ${style.bg} ${style.border}`}>
+    <div className={`flex items-center gap-3 p-3 rounded-lg border ${style.bg} ${style.border}`}>
       <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${style.number}`}>
         {action.number}
       </div>
       <div className="flex-1 min-w-0">
-        <h4 className="text-sm font-semibold text-gray-900 mb-0.5">{action.title}</h4>
-        <p className="text-xs text-gray-600">{action.subtitle}</p>
+        <h4 className="text-sm font-semibold text-slate-900 mb-0.5">{action.title}</h4>
+        <p className="text-xs text-slate-600">{action.subtitle}</p>
       </div>
     </div>
   )
@@ -197,7 +207,7 @@ function GivingPatternChart() {
   const maxAmount = Math.max(...givingYears.map((y) => y.amount))
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-5">
+    <div className="bg-white border border-slate-200 rounded-xl p-5">
       <div className="flex items-center gap-2 mb-6">
         <Activity className="w-4 h-4 text-sapling" />
         <h3 className="text-base font-semibold text-gray-900">Giving Pattern Analysis</h3>
@@ -279,7 +289,7 @@ export function OrchidInsightsTab({ showSidebar, onToggleSidebar, contact }: Orc
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           {/* Left Column: Orchid AI Assistant */}
           <div className="flex flex-col h-full">
-            <div className="bg-white border border-gray-200 rounded-lg p-5 flex-1 flex flex-col">
+            <div className="bg-white border border-dashed border-purple-600 rounded-lg p-5 flex-1 flex flex-col">
               {/* AI Assistant Header */}
               <div className="flex items-start gap-3 mb-5 pb-5 border-b border-gray-200">
                 <div className="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
@@ -342,10 +352,10 @@ export function OrchidInsightsTab({ showSidebar, onToggleSidebar, contact }: Orc
             {/* Key Insights & Recommended Actions */}
             <div className="grid grid-cols-2 gap-4">
               {/* Key Insights */}
-              <div className="bg-white border border-gray-200 rounded-lg p-5">
+              <div className="bg-white border border-slate-200 rounded-xl p-5">
                 <div className="flex items-center gap-2 mb-4">
-                  <Lightbulb className="w-4 h-4 text-amber-600" />
-                  <h3 className="text-sm font-semibold text-gray-900">Key Insights</h3>
+                  <Lightbulb className="w-4 h-4 text-amber-500" />
+                  <h3 className="text-sm font-bold text-slate-900 tracking-tight">Key Insights</h3>
                 </div>
                 <div className="space-y-3">
                   {keyInsights.map((insight) => (
@@ -355,26 +365,26 @@ export function OrchidInsightsTab({ showSidebar, onToggleSidebar, contact }: Orc
               </div>
 
               {/* Recommended Actions */}
-              <div className="bg-white border border-gray-200 rounded-lg p-5">
+              <div className="bg-white border border-slate-200 rounded-xl p-5">
                 <div className="flex items-center gap-2 mb-4">
                   <Target className="w-4 h-4 text-red-600" />
-                  <h3 className="text-sm font-semibold text-gray-900">Recommended Actions</h3>
+                  <h3 className="text-sm font-bold text-slate-900 tracking-tight">Recommended Actions</h3>
                 </div>
-                <div className="space-y-3 mb-4">
+                <div className="space-y-2 mb-2">
                   {recommendedActions.map((action) => (
                     <RecommendedActionCard key={action.id} action={action} />
                   ))}
                 </div>
-                {/* Automated Workflow Card */}
-                <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
-                  <div className="flex items-start gap-2">
-                    <Sparkles className="w-4 h-4 text-purple-600 flex-shrink-0 mt-0.5" />
-                    <div className="flex-1 min-w-0">
-                      <h4 className="text-sm font-semibold text-gray-900 mb-1">Add to automated workflow</h4>
-                      <p className="text-xs text-gray-600">
-                        AI recommends: <span className="text-purple-600 font-medium">Major Donor Cultivation</span> • Start now
-                      </p>
-                    </div>
+                {/* AI Workflow Card */}
+                <div className="flex items-center gap-3 p-3 rounded-lg border bg-purple-50/30 border-purple-200">
+                  <div className="w-6 h-6 flex items-center justify-center flex-shrink-0">
+                    <Workflow className="w-5 h-5 text-purple-600" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-sm font-semibold text-slate-900 mb-0.5">Add to automated workflow</h4>
+                    <p className="text-xs text-purple-700">
+                      AI recommends: <span className="font-semibold">Major Donor Cultivation</span> • <span className="font-semibold">Start now</span>
+                    </p>
                   </div>
                 </div>
               </div>

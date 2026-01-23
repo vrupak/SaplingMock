@@ -39,7 +39,7 @@ export function RelationshipsAccordion({
       <AccordionTrigger className="hover:no-underline text-lg text-sapling font-semibold">
         <div className="flex items-center gap-2">
           Relationships
-          <Badge className="bg-sapling-light/20 text-sapling border-none text-xs">{totalCount}</Badge>
+          <Badge className="bg-orange-500 text-white border-none text-xs">{totalCount}</Badge>
         </div>
       </AccordionTrigger>
       <AccordionContent>

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { ArrowLeft, Sparkles, Gift, TrendingUp, FileText, Calendar, Brain, MoreHorizontal, CheckSquare, Users, Database } from "lucide-react"
+import { ArrowLeft, Sparkles, Gift, TrendingUp, FileText, Calendar, Brain, MoreHorizontal, CheckSquare, Users, Database, Pencil } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   DropdownMenu,
@@ -46,9 +46,24 @@ export function ContactDetailView({ contact, onBack }: ContactDetailViewProps) {
       </div>
 
       {/* Profile Header Card */}
-      <div className="mx-24 mb-6 bg-white rounded-lg border border-gray-200 p-8 relative">
-        <div className="flex flex-col xl:flex-row items-stretch gap-12">
-          <ContactProfileHeader contact={contact} onEditClick={() => setEditOverlayOpen(true)} />
+      <div className="mx-24 mb-6 bg-white rounded-lg border border-gray-200 overflow-hidden">
+        {/* Top Bar: Sample Charity + Contact ID on left, Edit button on right */}
+        <div className="flex items-start justify-between px-8 pt-6 pb-4">
+          <div>
+            <p className="text-sm text-sapling font-medium">Sample Charity</p>
+            <p className="text-xs text-slate-400">Contact ID: {contact.contactId}</p>
+          </div>
+          <button
+            onClick={() => setEditOverlayOpen(true)}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <Pencil className="w-4 h-4 text-gray-400" />
+          </button>
+        </div>
+
+        {/* 4-Column Grid with vertical dividers */}
+        <div className="grid grid-cols-10 min-h-[380px]">
+          <ContactProfileHeader contact={contact} />
           <GivingStatisticsPanel stats={givingStats} />
           <OrchidAIInsightsCard />
         </div>

@@ -1,34 +1,19 @@
 "use client"
 
-import { Mail, Phone, Pencil } from "lucide-react"
+import { Mail, Phone } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import type { Contact } from "./types"
 
 interface ContactProfileHeaderProps {
   contact: Contact
-  onEditClick: () => void
 }
 
-export function ContactProfileHeader({ contact, onEditClick }: ContactProfileHeaderProps) {
+export function ContactProfileHeader({ contact }: ContactProfileHeaderProps) {
   return (
-    <div className="flex-shrink-0 min-w-[220px] pr-12 border-r border-gray-200">
-      {/* Top Row: Sample Charity + Contact ID */}
-      <div className="flex items-start justify-between mb-6">
-        <div>
-          <p className="text-sm text-sapling font-medium">Sample Charity</p>
-          <p className="text-xs text-gray-400">Contact ID: {contact.contactId}</p>
-        </div>
-        <button
-          onClick={onEditClick}
-          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-        >
-          <Pencil className="w-4 h-4 text-gray-400" />
-        </button>
-      </div>
-
-      {/* Avatar */}
-      <div className="w-28 h-28 bg-sapling-light/20 rounded-full flex items-center justify-center mb-5">
-        <span className="text-4xl font-semibold text-sapling">{contact.initials}</span>
+    <div className="col-span-3 px-8 pb-8 border-r border-slate-100">
+      {/* Avatar - reduced size */}
+      <div className="w-24 h-24 bg-sapling-light/20 rounded-full flex items-center justify-center mb-4">
+        <span className="text-3xl font-semibold text-sapling">{contact.initials}</span>
       </div>
 
       {/* Name */}
@@ -38,11 +23,11 @@ export function ContactProfileHeader({ contact, onEditClick }: ContactProfileHea
       {/* Contact Info */}
       <div className="space-y-2 text-sm text-gray-600">
         <div className="flex items-center gap-2">
-          <Mail className="w-4 h-4 text-gray-400" />
+          <Mail className="w-4 h-4 text-slate-400" />
           <span>{contact.email || "jennifer.lee@email.com"}</span>
         </div>
         <div className="flex items-center gap-2">
-          <Phone className="w-4 h-4 text-gray-400" />
+          <Phone className="w-4 h-4 text-slate-400" />
           <span>{contact.phone || "(206) 555-0103"}</span>
         </div>
       </div>
@@ -57,9 +42,9 @@ export function ContactProfileHeader({ contact, onEditClick }: ContactProfileHea
 
       {/* Badges */}
       <div className="flex gap-2 mt-5">
-        <Badge className="bg-sapling-light/10 text-sapling border-sapling-light/30 font-normal">Household</Badge>
-        <Badge className="bg-amber-50 text-amber-700 border-amber-200 font-normal">Middle</Badge>
-        <Badge className="bg-sapling-light/10 text-sapling border-sapling-light/30 font-normal">Recurring</Badge>
+        <Badge className="bg-green-50 text-green-700 border border-green-100 font-normal">Household</Badge>
+        <Badge className="bg-[#f0f4e8] text-[#5c6b4a] border border-[#d4dfc4] font-normal">Middle</Badge>
+        <Badge className="bg-blue-50 text-blue-700 border border-blue-100 font-normal">Recurring</Badge>
       </div>
     </div>
   )

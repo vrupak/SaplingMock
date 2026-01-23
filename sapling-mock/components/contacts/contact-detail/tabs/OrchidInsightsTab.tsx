@@ -100,35 +100,8 @@ function DonorScoreCard() {
         <TrendingUp className="w-4 h-4 text-sapling" />
         <h3 className="text-sm font-semibold text-gray-900">Donor Score</h3>
       </div>
-      <div className="flex items-center gap-4 mb-2">
-        <div className="relative w-16 h-16">
-          <svg className="w-16 h-16 transform -rotate-90">
-            <circle
-              cx="32"
-              cy="32"
-              r="28"
-              stroke="#e5e7eb"
-              strokeWidth="6"
-              fill="none"
-            />
-            <circle
-              cx="32"
-              cy="32"
-              r="28"
-              stroke="#22c55e"
-              strokeWidth="6"
-              fill="none"
-              strokeDasharray={`${(87 / 100) * 176} 176`}
-              strokeLinecap="round"
-            />
-          </svg>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-lg font-bold text-gray-900">87</span>
-          </div>
-        </div>
-        <div className="flex-1">
-          <div className="text-3xl font-bold text-gray-900">87/100</div>
-        </div>
+      <div className="flex-1 min-w-0 mb-2">
+        <div className="text-3xl font-bold text-sapling-dark truncate">87/100</div>
       </div>
       <p className="text-xs text-gray-600 mb-2">High engagement potential</p>
       <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -145,7 +118,9 @@ function NextGiftPredictionCard() {
         <DollarSign className="w-4 h-4 text-blue-600" />
         <h3 className="text-sm font-semibold text-gray-900">Next Gift Prediction</h3>
       </div>
-      <div className="text-3xl font-bold text-blue-600 mb-2">$2,500</div>
+      <div className="flex-1 min-w-0">
+        <div className="text-3xl font-bold text-blue-600 mb-2 truncate">$2,500</div>
+      </div>
       <p className="text-xs text-gray-600 mb-1">Estimated in 45-60 days</p>
       <p className="text-xs text-gray-500">Based on giving patterns</p>
     </div>
@@ -159,7 +134,9 @@ function EngagementLevelCard() {
         <Activity className="w-4 h-4 text-purple-600" />
         <h3 className="text-sm font-semibold text-gray-900">Engagement Level</h3>
       </div>
-      <div className="text-3xl font-bold text-purple-600 mb-2">High</div>
+      <div className="flex-1 min-w-0">
+        <div className="text-3xl font-bold text-purple-600 mb-2 truncate">High</div>
+      </div>
       <p className="text-xs text-gray-600 mb-2">Active in last 30 days</p>
       <div className="flex gap-1">
         <div className="h-2 flex-1 bg-purple-600 rounded-full" />
@@ -356,7 +333,7 @@ export function OrchidInsightsTab({ showSidebar, onToggleSidebar, contact }: Orc
           {/* Right Column: Analytics & Insights */}
           <div className="flex flex-col gap-6">
             {/* Top Metrics Grid */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <DonorScoreCard />
               <NextGiftPredictionCard />
               <EngagementLevelCard />

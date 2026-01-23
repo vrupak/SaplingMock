@@ -59,39 +59,47 @@ const sampleEvents: EventData[] = [
   },
 ]
 
-function EventCard({ event, index }: { event: EventData; index: number }) {
+function EventRow({ event, isLast, index }: { event: EventData; isLast: boolean; index: number }) {
   const statusStyles = {
-    Attended: "bg-green-100/80 text-green-800 border-green-300",
-    Registered: "bg-blue-100/80 text-blue-800 border-blue-300",
+    Attended: "text-green-700 bg-green-50",
+    Registered: "text-blue-700 bg-blue-50",
   }
 
-  // Alternate row styling: odd rows white, even rows subtle grey
-  const rowBgColor = index % 2 === 0 ? "bg-white" : "bg-slate-50"
+  // Alternate row background - even rows get subtle gray
+  const rowBg = index % 2 === 0 ? "bg-slate-50/70" : ""
 
   return (
-    <div className={`${rowBgColor} border border-gray-200 rounded-lg p-5`}>
-      <div className="flex items-start justify-between gap-4">
+    <div className={`py-4 ${!isLast ? 'border-b border-gray-200' : ''} ${rowBg} -mx-5 px-5`}>
+      <div className="flex items-start gap-4">
+        {/* Green Calendar Icon */}
+        <div className="flex-shrink-0 mt-1">
+          <Calendar className="w-5 h-5 text-sapling" />
+        </div>
+
+        {/* Event Details */}
         <div className="flex-1 min-w-0">
-          <h4 className="text-base font-bold text-gray-900 mb-2">{event.title}</h4>
-          <div className="flex items-center gap-1.5 text-sm text-gray-600 mb-1.5">
-            <Calendar className="w-3.5 h-3.5 flex-shrink-0" />
-            <span>{event.date} at {event.time}</span>
-          </div>
-          <p className="text-xs text-gray-500">Registered on {event.registeredDate}</p>
+          <h4 className="text-sm font-semibold text-gray-900 mb-0.5">{event.title}</h4>
+          <p className="text-sm text-gray-600 mb-0.5">
+            {event.date} at {event.time}
+          </p>
+          <p className="text-xs text-gray-500 mb-2">Registered on {event.registeredDate}</p>
 
           {/* Attendees List */}
           {event.attendees.length > 0 && (
-            <div className="mt-3">
-              <ul className="list-disc list-inside text-sm text-gray-700">
-                {event.attendees.map((attendee, idx) => (
-                  <li key={idx}>{attendee}</li>
-                ))}
-              </ul>
-            </div>
+            <ul className="text-sm text-gray-700">
+              {event.attendees.map((attendee, idx) => (
+                <li key={idx} className="flex items-center gap-1.5">
+                  <span className="w-1 h-1 rounded-full bg-gray-400" />
+                  {attendee}
+                </li>
+              ))}
+            </ul>
           )}
         </div>
+
+        {/* Status Badge */}
         <span
-          className={`px-3 py-1 rounded text-xs font-semibold border flex-shrink-0 ${statusStyles[event.status]}`}
+          className={`px-3 py-1 rounded text-xs font-medium flex-shrink-0 ${statusStyles[event.status]}`}
         >
           {event.status}
         </span>
@@ -135,16 +143,17 @@ export function EventsTab({ showSidebar, onToggleSidebar, contact }: EventsTabPr
         </div>
 
         {/* Event Participation Section */}
-        <div className="mb-6">
-          <div className="mb-4">
-            <h3 className="text-base font-semibold text-gray-900 mb-1">Event Participation</h3>
+        <div className="bg-white border border-slate-200 rounded-xl">
+          {/* Header */}
+          <div className="p-5 border-b border-gray-200">
+            <h3 className="text-base font-semibold text-gray-900 mb-0.5">Event Participation</h3>
             <p className="text-sm text-gray-500">Events managed by Sapling Events</p>
           </div>
 
-          {/* Event Cards */}
-          <div className="space-y-4">
+          {/* Event Rows */}
+          <div className="px-5">
             {sampleEvents.map((event, index) => (
-              <EventCard key={event.id} event={event} index={index} />
+              <EventRow key={event.id} event={event} isLast={index === sampleEvents.length - 1} index={index} />
             ))}
           </div>
         </div>

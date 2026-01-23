@@ -37,7 +37,7 @@ type ContentView = "layout" | "grid"
 
 export function TablePlacementPage({ event, onBack }: TablePlacementPageProps) {
   const [viewMode, setViewMode] = useState<ViewMode>("tables")
-  const [contentView, setContentView] = useState<ContentView>("grid")
+  const [contentView, setContentView] = useState<ContentView>("layout")
   const [isAIActive, setIsAIActive] = useState(false)
 
   // Modal states

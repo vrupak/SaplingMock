@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { EventCard } from "./EventCard"
+import { EventRow } from "./EventRow"
 import { CreateEventModal } from "./CreateEventModal"
 import { useEvents } from "./hooks/useEvents"
 import type { EventFormData } from "./types"
@@ -28,7 +29,7 @@ export function EventsPage() {
   } = useEvents()
 
   const [createModalOpen, setCreateModalOpen] = useState(false)
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
+  const [viewMode, setViewMode] = useState<"grid" | "list">("list")
 
   const handleCreateEvent = (eventData: EventFormData) => {
     addEvent({
@@ -206,13 +207,47 @@ export function EventsPage() {
         </div>
       </div>
 
-      {/* Events Grid */}
+      {/* Events Display - Grid or Table */}
       {events.length > 0 ? (
-        <div className={viewMode === "grid" ? "grid grid-cols-3 gap-6" : "space-y-4"}>
-          {events.map((event) => (
-            <EventCard key={event.id} event={event} />
-          ))}
-        </div>
+        viewMode === "grid" ? (
+          <div className="grid grid-cols-3 gap-6">
+            {events.map((event) => (
+              <EventCard key={event.id} event={event} />
+            ))}
+          </div>
+        ) : (
+          <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-slate-200 bg-slate-100">
+                  <th className="py-3 px-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                    Event
+                  </th>
+                  <th className="py-3 px-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                    Date & Time
+                  </th>
+                  <th className="py-3 px-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                    Location
+                  </th>
+                  <th className="py-3 px-4 text-right text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                    Registered
+                  </th>
+                  <th className="py-3 px-4 text-right text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                    Revenue
+                  </th>
+                  <th className="py-3 px-4 text-right text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                    Status
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {events.map((event) => (
+                  <EventRow key={event.id} event={event} />
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )
       ) : (
         <div className="bg-white border border-gray-200 rounded-lg p-12 text-center">
           <p className="text-gray-500 text-lg mb-4">No events found</p>

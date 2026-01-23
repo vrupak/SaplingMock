@@ -14,20 +14,21 @@ export function EventCard({ event }: EventCardProps) {
     ? (event.revenue / event.fundraisingGoal) * 100
     : 0
 
-  // Badge styles based on event type
-  const typeBadgeStyles = {
-    Gala: "bg-purple-50 text-purple-700 border-purple-200",
-    Auction: "bg-blue-50 text-blue-700 border-blue-200",
-    Fundraiser: "bg-green-50 text-green-700 border-green-200",
-    Stewardship: "bg-pink-50 text-pink-700 border-pink-200",
-    Workshop: "bg-amber-50 text-amber-700 border-amber-200",
+  // Category badge styles - lowercase display with color coding
+  const typeBadgeStyles: Record<string, string> = {
+    Gala: "bg-purple-100 text-purple-700 border-purple-200",
+    Auction: "bg-blue-100 text-blue-700 border-blue-200",
+    Fundraiser: "bg-green-100 text-green-700 border-green-200",
+    Stewardship: "bg-pink-100 text-pink-700 border-pink-200",
+    Workshop: "bg-amber-100 text-amber-700 border-amber-200",
   }
 
-  const statusBadgeStyles = {
-    Planning: "bg-gray-50 text-gray-700 border-gray-200",
-    Upcoming: "bg-blue-50 text-blue-700 border-blue-200",
-    Ongoing: "bg-orange-50 text-orange-700 border-orange-200",
-    Completed: "bg-green-50 text-green-700 border-green-200",
+  // Status badge styles
+  const statusBadgeStyles: Record<string, string> = {
+    Planning: "bg-gray-100 text-gray-600 border-gray-200",
+    Upcoming: "bg-blue-50 text-blue-600 border-blue-200",
+    Ongoing: "bg-green-50 text-green-600 border-green-200",
+    Completed: "bg-gray-50 text-gray-600 border-gray-200",
   }
 
   return (
@@ -38,11 +39,11 @@ export function EventCard({ event }: EventCardProps) {
           {event.name}
         </h3>
         <div className="flex items-center gap-2 flex-shrink-0">
-          <Badge className={`text-xs font-medium border ${typeBadgeStyles[event.type]}`}>
-            {event.type}
+          <Badge className={`text-xs font-medium border rounded-full ${typeBadgeStyles[event.type]}`}>
+            {event.type.toLowerCase()}
           </Badge>
-          <Badge className={`text-xs font-medium border ${statusBadgeStyles[event.status]}`}>
-            {event.status}
+          <Badge className={`text-xs font-medium border rounded-full ${statusBadgeStyles[event.status]}`}>
+            {event.status.toLowerCase()}
           </Badge>
         </div>
       </div>

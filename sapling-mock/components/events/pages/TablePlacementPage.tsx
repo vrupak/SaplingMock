@@ -22,6 +22,7 @@ import {
   type AddTableFormData,
   type TableLayoutFormData,
 } from "../modals"
+import { useVenueLayout } from "../hooks/useVenueLayout"
 import type { Event } from "../types"
 import type { TableData, TableShape } from "../types/table-types"
 
@@ -36,13 +37,27 @@ type ContentView = "layout" | "grid"
 
 export function TablePlacementPage({ event, onBack }: TablePlacementPageProps) {
   const [viewMode, setViewMode] = useState<ViewMode>("tables")
-  const [tables, setTables] = useState<TableData[]>(sampleTables)
-  const [contentView, setContentView] = useState<ContentView>("grid") // grid or layout view
+  const [contentView, setContentView] = useState<ContentView>("grid")
   const [isAIActive, setIsAIActive] = useState(false)
 
   // Modal states
   const [isAddTableModalOpen, setIsAddTableModalOpen] = useState(false)
   const [isLayoutGeneratorModalOpen, setIsLayoutGeneratorModalOpen] = useState(false)
+
+  // Use the venue layout hook for state management
+  const {
+    tables,
+    setTables,
+    snapToGrid,
+    toggleSnapToGrid,
+    updateTablePosition,
+    updateTableName,
+    updateTableLevel,
+    deleteTable,
+  } = useVenueLayout({
+    initialTables: sampleTables,
+    canvasBounds: { minX: 0, maxX: 900, minY: 0, maxY: 850 },
+  })
 
   const metrics = calculateSeatingMetrics(tables)
 
@@ -51,14 +66,13 @@ export function TablePlacementPage({ event, onBack }: TablePlacementPageProps) {
     // Future: Open table detail/edit modal
   }
 
-  const handleAddGuest = (table: TableData) => {
-    console.log("Add guest to table:", table)
+  const handleAddGuest = (tableId: string) => {
+    console.log("Add guest to table:", tableId)
     // Future: Open add guest modal
   }
 
-  const handleDeleteTable = (table: TableData) => {
-    console.log("Delete table:", table)
-    // Future: Show delete confirmation
+  const handleDeleteTable = (tableId: string) => {
+    deleteTable(tableId)
   }
 
   // Convert modal shape to table shape type
@@ -72,7 +86,7 @@ export function TablePlacementPage({ event, onBack }: TablePlacementPageProps) {
     return shapeMap[shape] || "round"
   }
 
-  // Handle adding a single table
+  // Handle adding a single table - positions at canvas center
   const handleAddTable = (data: AddTableFormData) => {
     const newTable: TableData = {
       id: `table-${Date.now()}`,
@@ -86,11 +100,11 @@ export function TablePlacementPage({ event, onBack }: TablePlacementPageProps) {
         isOccupied: false,
       })),
       position: {
-        x: 100 + (tables.length % 4) * 200,
-        y: 100 + Math.floor(tables.length / 4) * 200,
+        x: 450, // Center of 900px canvas
+        y: 425, // Center of 850px canvas
       },
     }
-    setTables([...tables, newTable])
+    setTables((prev) => [...prev, newTable])
   }
 
   // Handle bulk table generation
@@ -119,7 +133,7 @@ export function TablePlacementPage({ event, onBack }: TablePlacementPageProps) {
         },
       })
     }
-    setTables([...tables, ...newTables])
+    setTables((prev) => [...prev, ...newTables])
   }
 
   const handleImportBlueprint = () => {
@@ -249,11 +263,21 @@ export function TablePlacementPage({ event, onBack }: TablePlacementPageProps) {
       {contentView === "grid" ? (
         <SeatingGridView
           tables={tables}
-          onAddGuest={handleAddGuest}
-          onDeleteTable={handleDeleteTable}
+          onAddGuest={(table) => handleAddGuest(table.id)}
+          onDeleteTable={(table) => handleDeleteTable(table.id)}
         />
       ) : (
-        <VenueCanvas tables={tables} onTableClick={handleTableClick} />
+        <VenueCanvas
+          tables={tables}
+          snapToGrid={snapToGrid}
+          onSnapToGridChange={toggleSnapToGrid}
+          onTablePositionChange={updateTablePosition}
+          onTableNameChange={updateTableName}
+          onTableLevelChange={updateTableLevel}
+          onTableDelete={handleDeleteTable}
+          onTableAddGuest={handleAddGuest}
+          onTableClick={handleTableClick}
+        />
       )}
 
       {/* Add Table Modal */}

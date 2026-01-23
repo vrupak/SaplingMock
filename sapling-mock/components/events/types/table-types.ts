@@ -48,3 +48,11 @@ export const getTableBackgroundColor = (filled: number, capacity: number): strin
   if (percentage < 1) return "bg-blue-100" // More than half
   return "bg-green-200" // Full
 }
+
+// Table dimensions for constraint calculations
+export const TABLE_DIMENSIONS = {
+  round: { width: 160, height: 160 },
+  rectangular: { width: 200, height: 160 },
+  oval: { width: 180, height: 140 },
+  square: { width: 160, height: 160 },
+} as const

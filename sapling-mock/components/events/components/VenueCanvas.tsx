@@ -1,261 +1,145 @@
 "use client"
 
-import { MapPin, Trash2, Users } from "lucide-react"
-import type { TableData } from "../types/table-types"
-import { levelColors, getTableBackgroundColor } from "../types/table-types"
+import { useRef, useState, useCallback } from "react"
+import {
+  DndContext,
+  DragEndEvent,
+  useSensor,
+  useSensors,
+  PointerSensor,
+} from "@dnd-kit/core"
+import { MapPin, Grid3x3 } from "lucide-react"
+import { TooltipProvider } from "@/components/ui/tooltip"
+import { cn } from "@/lib/utils"
+import type { TableData, TableLevel, TableShape } from "../types/table-types"
+import { TABLE_DIMENSIONS } from "../types/table-types"
+import { DraggableTable } from "./DraggableTable"
 
 interface VenueCanvasProps {
   tables: TableData[]
+  snapToGrid?: boolean
+  onSnapToGridChange?: (enabled: boolean) => void
+  onTablePositionChange?: (tableId: string, position: { x: number; y: number }) => void
+  onTableNameChange?: (tableId: string, name: string) => void
+  onTableLevelChange?: (tableId: string, level: TableLevel) => void
+  onTableDelete?: (tableId: string) => void
+  onTableAddGuest?: (tableId: string) => void
   onTableClick?: (table: TableData) => void
 }
 
-interface TableComponentProps {
-  table: TableData
-  onClick?: () => void
-}
+export function VenueCanvas({
+  tables,
+  snapToGrid = false,
+  onSnapToGridChange,
+  onTablePositionChange,
+  onTableNameChange,
+  onTableLevelChange,
+  onTableDelete,
+  onTableAddGuest,
+  onTableClick,
+}: VenueCanvasProps) {
+  const canvasRef = useRef<HTMLDivElement>(null)
+  const [editingTableId, setEditingTableId] = useState<string | null>(null)
+  const [editingField, setEditingField] = useState<"name" | "level" | null>(null)
 
-// Individual seat component
-function SeatIndicator({ isOccupied, angle, distance }: { isOccupied: boolean; angle: number; distance: number }) {
-  const x = Math.cos(angle) * distance
-  const y = Math.sin(angle) * distance
-
-  return (
-    <div
-      className={`absolute w-4 h-4 rounded-sm transform -translate-x-1/2 -translate-y-1/2 border ${
-        isOccupied
-          ? "bg-blue-500 border-blue-600"
-          : "bg-gray-200 border-gray-300"
-      }`}
-      style={{
-        left: `calc(50% + ${x}px)`,
-        top: `calc(50% + ${y}px)`,
-      }}
-    />
+  // Configure pointer sensor with activation constraint to distinguish click from drag
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8, // 8px movement required to start drag
+      },
+    })
   )
-}
 
-// Round table component
-function RoundTable({ table, onClick }: TableComponentProps) {
-  const filledCount = table.seats.filter((s) => s.isOccupied).length
-  const levelColor = levelColors[table.level ?? "default"]
-  const bgColor = getTableBackgroundColor(filledCount, table.capacity)
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, delta } = event
+      const tableId = active.id as string
+      const table = tables.find((t) => t.id === tableId)
 
-  // Calculate seat positions around the circle
-  const seatAngles = table.seats.map((_, i) => (i / table.capacity) * 2 * Math.PI - Math.PI / 2)
-  const seatDistance = 65 // Distance from center to seats
+      if (table && canvasRef.current) {
+        const canvasRect = canvasRef.current.getBoundingClientRect()
 
-  return (
-    <div
-      className="absolute cursor-pointer group"
-      style={{
-        left: table.position.x,
-        top: table.position.y,
-        transform: "translate(-50%, -50%)",
-      }}
-      onClick={onClick}
-    >
-      {/* Seats around the table */}
-      <div className="relative w-[140px] h-[140px]">
-        {table.seats.map((seat, i) => (
-          <SeatIndicator
-            key={seat.id}
-            isOccupied={seat.isOccupied}
-            angle={seatAngles[i]}
-            distance={seatDistance}
-          />
-        ))}
+        // Calculate new position
+        let newX = table.position.x + delta.x
+        let newY = table.position.y + delta.y
 
-        {/* Table circle */}
-        <div
-          className={`absolute inset-4 rounded-full ${bgColor} border-2 border-gray-300 flex flex-col items-center justify-center transition-shadow group-hover:shadow-lg`}
-        >
-          {/* Table name */}
-          <span className="text-xs font-semibold text-gray-800 text-center px-2 leading-tight">
-            {table.name}
-          </span>
+        // Get table dimensions for constraint
+        const dims = TABLE_DIMENSIONS[table.shape as keyof typeof TABLE_DIMENSIONS] || TABLE_DIMENSIONS.round
+        const halfWidth = dims.width / 2
+        const halfHeight = dims.height / 2
 
-          {/* Level badge */}
-          {table.level ? (
-            <span
-              className={`text-[10px] font-medium px-2 py-0.5 rounded-full mt-1 ${levelColor.bg} ${levelColor.text}`}
-            >
-              {table.level}
-            </span>
-          ) : (
-            <button className="text-[10px] font-medium px-2 py-0.5 rounded-full mt-1 text-orange-600 hover:bg-orange-50">
-              + Add Level
-            </button>
-          )}
+        // Constrain to canvas bounds
+        newX = Math.max(halfWidth, Math.min(canvasRect.width - halfWidth, newX))
+        newY = Math.max(halfHeight, Math.min(canvasRect.height - halfHeight, newY))
 
-          {/* Occupancy */}
-          <span className="text-xs text-gray-600 mt-1">
-            {filledCount}/{table.capacity}
-          </span>
-
-          {/* Action icons */}
-          <div className="flex items-center gap-1 mt-1">
-            <button className="p-0.5 text-red-400 hover:text-red-600 transition-colors">
-              <Trash2 className="w-3 h-3" />
-            </button>
-            <button className="p-0.5 text-orange-400 hover:text-orange-600 transition-colors">
-              <Users className="w-3 h-3" />
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+        onTablePositionChange?.(tableId, { x: newX, y: newY })
+      }
+    },
+    [tables, onTablePositionChange]
   )
-}
 
-// Rectangular table component
-function RectangularTable({ table, onClick }: TableComponentProps) {
-  const filledCount = table.seats.filter((s) => s.isOccupied).length
-  const levelColor = levelColors[table.level ?? "default"]
-  const bgColor = getTableBackgroundColor(filledCount, table.capacity)
+  const handleStartEditing = (tableId: string, field: "name" | "level") => {
+    setEditingTableId(tableId)
+    setEditingField(field)
+  }
 
-  // Calculate seat positions for rectangular table
-  // Top row, bottom row, and side seats
-  const topSeats = Math.ceil(table.capacity / 3)
-  const bottomSeats = Math.ceil(table.capacity / 3)
-  const leftSeats = Math.floor((table.capacity - topSeats - bottomSeats) / 2)
-  const rightSeats = table.capacity - topSeats - bottomSeats - leftSeats
+  const handleStopEditing = () => {
+    setEditingTableId(null)
+    setEditingField(null)
+  }
 
-  return (
-    <div
-      className="absolute cursor-pointer group"
-      style={{
-        left: table.position.x,
-        top: table.position.y,
-        transform: "translate(-50%, -50%)",
-      }}
-      onClick={onClick}
-    >
-      <div className="relative w-[180px] h-[140px]">
-        {/* Top seats */}
-        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 flex gap-2">
-          {Array.from({ length: topSeats }).map((_, i) => (
-            <div
-              key={`top-${i}`}
-              className={`w-4 h-4 rounded-sm border ${
-                table.seats[i]?.isOccupied
-                  ? "bg-blue-500 border-blue-600"
-                  : "bg-gray-200 border-gray-300"
-              }`}
-            />
-          ))}
-        </div>
-
-        {/* Left seats */}
-        <div className="absolute left-0 top-1/2 transform -translate-y-1/2 flex flex-col gap-2">
-          {Array.from({ length: leftSeats }).map((_, i) => (
-            <div
-              key={`left-${i}`}
-              className={`w-4 h-4 rounded-sm border ${
-                table.seats[topSeats + i]?.isOccupied
-                  ? "bg-blue-500 border-blue-600"
-                  : "bg-gray-200 border-gray-300"
-              }`}
-            />
-          ))}
-        </div>
-
-        {/* Right seats */}
-        <div className="absolute right-0 top-1/2 transform -translate-y-1/2 flex flex-col gap-2">
-          {Array.from({ length: rightSeats }).map((_, i) => (
-            <div
-              key={`right-${i}`}
-              className={`w-4 h-4 rounded-sm border ${
-                table.seats[topSeats + leftSeats + i]?.isOccupied
-                  ? "bg-blue-500 border-blue-600"
-                  : "bg-gray-200 border-gray-300"
-              }`}
-            />
-          ))}
-        </div>
-
-        {/* Bottom seats */}
-        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex gap-2">
-          {Array.from({ length: bottomSeats }).map((_, i) => (
-            <div
-              key={`bottom-${i}`}
-              className={`w-4 h-4 rounded-sm border ${
-                table.seats[topSeats + leftSeats + rightSeats + i]?.isOccupied
-                  ? "bg-blue-500 border-blue-600"
-                  : "bg-gray-200 border-gray-300"
-              }`}
-            />
-          ))}
-        </div>
-
-        {/* Table rectangle */}
-        <div
-          className={`absolute inset-5 rounded-lg ${bgColor} border-2 border-gray-300 flex flex-col items-center justify-center transition-shadow group-hover:shadow-lg`}
-        >
-          {/* Table name */}
-          <span className="text-xs font-semibold text-gray-800 text-center px-2 leading-tight">
-            {table.name}
-          </span>
-
-          {/* Level badge */}
-          {table.level ? (
-            <span
-              className={`text-[10px] font-medium px-2 py-0.5 rounded-full mt-1 ${levelColor.bg} ${levelColor.text}`}
-            >
-              {table.level}
-            </span>
-          ) : (
-            <button className="text-[10px] font-medium px-2 py-0.5 rounded-full mt-1 text-orange-600 hover:bg-orange-50">
-              + Add Level
-            </button>
-          )}
-
-          {/* Occupancy */}
-          <span className="text-xs text-gray-600 mt-1">
-            {filledCount}/{table.capacity}
-          </span>
-
-          {/* Action icons */}
-          <div className="flex items-center gap-1 mt-1">
-            <button className="p-0.5 text-red-400 hover:text-red-600 transition-colors">
-              <Trash2 className="w-3 h-3" />
-            </button>
-            <button className="p-0.5 text-orange-400 hover:text-orange-600 transition-colors">
-              <Users className="w-3 h-3" />
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-export function VenueCanvas({ tables, onTableClick }: VenueCanvasProps) {
   return (
     <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
       {/* Canvas Header */}
-      <div className="flex items-center justify-center gap-2 py-3 border-b border-dashed border-gray-300 text-gray-500 text-sm">
-        <MapPin className="w-4 h-4" />
-        <span>Drag tables to arrange your venue layout</span>
+      <div className="flex items-center justify-between px-4 py-3 border-b border-dashed border-gray-300">
+        <div className="flex items-center gap-2 text-gray-500 text-sm">
+          <MapPin className="w-4 h-4" />
+          <span>Drag tables to arrange your venue layout</span>
+        </div>
+
+        {/* Snap to Grid Toggle */}
+        <button
+          onClick={() => onSnapToGridChange?.(!snapToGrid)}
+          className={cn(
+            "flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors",
+            snapToGrid
+              ? "bg-blue-100 text-blue-700 border border-blue-300"
+              : "bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200"
+          )}
+        >
+          <Grid3x3 className="w-4 h-4" />
+          Snap to Grid
+        </button>
       </div>
 
-      {/* Canvas Area */}
-      <div className="flex justify-center bg-white py-8">
-        <div className="relative" style={{ width: "900px", height: "850px" }}>
-          {tables.map((table) =>
-            table.shape === "round" ? (
-              <RoundTable
-                key={table.id}
-                table={table}
-                onClick={() => onTableClick?.(table)}
-              />
-            ) : (
-              <RectangularTable
-                key={table.id}
-                table={table}
-                onClick={() => onTableClick?.(table)}
-              />
-            )
-          )}
+      {/* Canvas Area - Updated background color with scroll support */}
+      <div className="overflow-auto bg-slate-50 py-8">
+        <div className="flex justify-center min-w-[920px]">
+          <TooltipProvider delayDuration={300}>
+            <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+              <div
+                ref={canvasRef}
+                className="relative w-[900px] flex-shrink-0"
+                style={{ height: "850px" }}
+              >
+              {tables.map((table) => (
+                <DraggableTable
+                  key={table.id}
+                  table={table}
+                  isEditing={editingTableId === table.id}
+                  editingField={editingTableId === table.id ? editingField : null}
+                  onNameChange={(name) => onTableNameChange?.(table.id, name)}
+                  onLevelChange={(level) => onTableLevelChange?.(table.id, level)}
+                  onStartEditing={(field) => handleStartEditing(table.id, field)}
+                  onStopEditing={handleStopEditing}
+                  onDelete={() => onTableDelete?.(table.id)}
+                  onAddGuest={() => onTableAddGuest?.(table.id)}
+                />
+              ))}
+              </div>
+            </DndContext>
+          </TooltipProvider>
         </div>
       </div>
     </div>

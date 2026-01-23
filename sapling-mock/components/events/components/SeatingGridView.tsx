@@ -30,25 +30,25 @@ export function SeatingGridView({
     <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
       {/* Table Header */}
       <div className="grid grid-cols-[80px_1fr_120px_100px_100px_100px_100px] gap-4 px-6 py-3 bg-gray-50/50 border-b border-gray-100">
-        <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+        <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
           Table
         </div>
-        <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+        <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
           Name
         </div>
-        <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+        <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
           Shape
         </div>
-        <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider text-center">
+        <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center">
           Capacity
         </div>
-        <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider text-center">
+        <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center">
           Assigned
         </div>
-        <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider text-center">
+        <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center">
           Available
         </div>
-        <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider text-center">
+        <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center">
           Actions
         </div>
       </div>
@@ -63,7 +63,7 @@ export function SeatingGridView({
           return (
             <div
               key={table.id}
-              className="grid grid-cols-[80px_1fr_120px_100px_100px_100px_100px] gap-4 px-6 py-4 items-center hover:bg-gray-50/50 transition-colors"
+              className="grid grid-cols-[80px_1fr_120px_100px_100px_100px_100px] gap-4 px-6 py-4 items-center hover:bg-blue-50/60 transition-colors duration-200"
             >
               {/* Table Number */}
               <div className="text-sm font-medium text-gray-900">
@@ -71,7 +71,7 @@ export function SeatingGridView({
               </div>
 
               {/* Name */}
-              <div className="text-sm font-semibold text-gray-900">
+              <div className="text-sm font-normal text-gray-900">
                 {table.name}
               </div>
 
@@ -99,14 +99,14 @@ export function SeatingGridView({
               <div className="flex items-center justify-center gap-2">
                 <button
                   onClick={() => onAddGuest?.(table)}
-                  className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                  className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-md transition-all duration-200 hover:scale-110"
                   title="Add Guest"
                 >
                   <Users className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => onDeleteTable?.(table)}
-                  className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                  className="p-1.5 text-red-500 hover:bg-red-50 rounded-md transition-all duration-200 hover:scale-110"
                   title="Delete Table"
                 >
                   <Trash2 className="w-4 h-4" />

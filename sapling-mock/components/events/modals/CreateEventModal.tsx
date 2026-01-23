@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import type { EventFormData } from "./types"
+import type { EventFormData } from "../types"
 
 interface CreateEventModalProps {
   open: boolean

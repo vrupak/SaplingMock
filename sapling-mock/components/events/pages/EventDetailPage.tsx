@@ -5,7 +5,6 @@ import {
   ArrowLeft,
   Link2,
   UserPlus,
-  Share2,
   ExternalLink,
   Mail,
   Download,
@@ -14,13 +13,21 @@ import {
   Calendar,
   MapPin,
   Users,
+  Upload,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { EventOverview } from "./EventOverview"
-import { EventAttendees, type Attendee } from "./EventAttendees"
-import { EventFinancials } from "./EventFinancials"
-import type { Event } from "./types"
+import { EventOverview } from "../components/EventOverview"
+import { EventAttendees, type Attendee } from "../components/EventAttendees"
+import { EventFinancials } from "../components/EventFinancials"
+import {
+  EventInviteLinkModal,
+  AddContactModal,
+  ImportContactsModal,
+  EmailAttendeesModal,
+} from "../modals"
+import type { Event } from "../types"
 
+type ModalType = "inviteLink" | "addContact" | "importContacts" | "emailAttendees" | null
 type TabType = "overview" | "attendees" | "financials"
 
 interface EventDetailPageProps {
@@ -90,6 +97,7 @@ const sampleAttendees: Attendee[] = [
 export function EventDetailPage({ event, onBack }: EventDetailPageProps) {
   const [activeTab, setActiveTab] = useState<TabType>("overview")
   const [attendees, setAttendees] = useState<Attendee[]>(sampleAttendees)
+  const [activeModal, setActiveModal] = useState<ModalType>(null)
 
   // Calculate metrics
   const confirmedCount = attendees.filter((a) => a.status === "confirmed").length
@@ -154,19 +162,35 @@ export function EventDetailPage({ event, onBack }: EventDetailPageProps) {
           {/* Action Buttons */}
           <div className="flex items-center gap-2">
             {/* Icon Buttons */}
-            <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+            <button
+              onClick={() => setActiveModal("inviteLink")}
+              className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+              title="Event Invite Link"
+            >
               <Link2 className="w-5 h-5" />
             </button>
-            <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+            <button
+              onClick={() => setActiveModal("addContact")}
+              className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+              title="Add Contact"
+            >
               <UserPlus className="w-5 h-5" />
             </button>
-            <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
-              <Share2 className="w-5 h-5" />
+            <button
+              onClick={() => setActiveModal("importContacts")}
+              className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+              title="Import Contacts"
+            >
+              <Upload className="w-5 h-5" />
             </button>
             <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
               <ExternalLink className="w-5 h-5" />
             </button>
-            <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+            <button
+              onClick={() => setActiveModal("emailAttendees")}
+              className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+              title="Email Attendees"
+            >
               <Mail className="w-5 h-5" />
             </button>
             <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
@@ -291,6 +315,32 @@ export function EventDetailPage({ event, onBack }: EventDetailPageProps) {
           <EventFinancials event={event} attendees={attendees} />
         )}
       </div>
+
+      {/* Modals */}
+      <EventInviteLinkModal
+        open={activeModal === "inviteLink"}
+        onOpenChange={(open) => setActiveModal(open ? "inviteLink" : null)}
+        event={event}
+      />
+
+      <AddContactModal
+        open={activeModal === "addContact"}
+        onOpenChange={(open) => setActiveModal(open ? "addContact" : null)}
+        event={event}
+      />
+
+      <ImportContactsModal
+        open={activeModal === "importContacts"}
+        onOpenChange={(open) => setActiveModal(open ? "importContacts" : null)}
+        event={event}
+      />
+
+      <EmailAttendeesModal
+        open={activeModal === "emailAttendees"}
+        onOpenChange={(open) => setActiveModal(open ? "emailAttendees" : null)}
+        event={event}
+        attendeeCount={attendees.length}
+      />
     </div>
   )
 }

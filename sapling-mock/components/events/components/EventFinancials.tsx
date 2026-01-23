@@ -1,6 +1,6 @@
 "use client"
 
-import type { Event } from "./types"
+import type { Event } from "../types"
 import type { Attendee } from "./EventAttendees"
 
 interface TicketRevenue {

@@ -1,7 +1,7 @@
 "use client"
 
 import { Badge } from "@/components/ui/badge"
-import type { Event } from "./types"
+import type { Event } from "../types"
 
 interface EventRowProps {
   event: Event

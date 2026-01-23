@@ -2,7 +2,7 @@
 
 import { Calendar, Clock, MapPin } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
-import type { Event } from "./types"
+import type { Event } from "../types"
 
 interface EventCardProps {
   event: Event

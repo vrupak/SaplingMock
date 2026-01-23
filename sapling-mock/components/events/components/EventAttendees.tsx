@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Search, Plus, ExternalLink, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import type { Event } from "./types"
+import type { Event } from "../types"
 
 export interface Attendee {
   id: string

@@ -11,12 +11,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { EventCard } from "./EventCard"
-import { EventRow } from "./EventRow"
-import { CreateEventModal } from "./CreateEventModal"
+import { EventCard } from "../components/EventCard"
+import { EventRow } from "../components/EventRow"
+import { CreateEventModal } from "../modals"
 import { EventDetailPage } from "./EventDetailPage"
-import { useEvents } from "./hooks/useEvents"
-import type { Event, EventFormData } from "./types"
+import { useEvents } from "../hooks/useEvents"
+import type { Event, EventFormData } from "../types"
 
 export function EventsPage() {
   const {
@@ -44,8 +44,8 @@ export function EventsPage() {
   const handleCreateEvent = (eventData: EventFormData) => {
     addEvent({
       name: eventData.name,
-      type: eventData.type as any,
-      status: eventData.status as any,
+      type: eventData.type as Event["type"],
+      status: eventData.status as Event["status"],
       description: eventData.description,
       startDate: eventData.startDate,
       endDate: eventData.endDate,

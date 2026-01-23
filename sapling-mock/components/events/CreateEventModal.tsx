@@ -5,6 +5,7 @@ import { CalendarIcon, Sparkles, X } from "lucide-react"
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -81,6 +82,9 @@ export function CreateEventModal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-[95vw] max-w-xl sm:max-w-2xl md:max-w-2xl lg:max-w-3xl max-h-[90vh] overflow-hidden p-0" showCloseButton={false}>
+        {/* Visually Hidden Title for Accessibility */}
+        <DialogTitle className="sr-only">Create Event</DialogTitle>
+
         {/* Sticky Header */}
         <div className="sticky top-0 bg-white z-10 border-b border-gray-200 px-6 pt-6 pb-4">
           <div className="flex items-center justify-between">

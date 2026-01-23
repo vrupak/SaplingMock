@@ -30,13 +30,12 @@ export interface SeatingMetrics {
 }
 
 // Color mapping for table levels
-export const levelColors: Record<TableLevel | "default", { bg: string; text: string; border: string }> = {
+export const levelColors: Record<NonNullable<TableLevel> | "default", { bg: string; text: string; border: string }> = {
   Diamond: { bg: "bg-teal-100", text: "text-teal-600", border: "border-teal-300" },
   Platinum: { bg: "bg-blue-100", text: "text-blue-600", border: "border-blue-300" },
   Gold: { bg: "bg-amber-100", text: "text-amber-600", border: "border-amber-300" },
   Silver: { bg: "bg-gray-100", text: "text-gray-600", border: "border-gray-300" },
   Bronze: { bg: "bg-orange-100", text: "text-orange-600", border: "border-orange-300" },
-  null: { bg: "bg-gray-50", text: "text-gray-500", border: "border-gray-200" },
   default: { bg: "bg-gray-50", text: "text-gray-500", border: "border-gray-200" },
 }
 
